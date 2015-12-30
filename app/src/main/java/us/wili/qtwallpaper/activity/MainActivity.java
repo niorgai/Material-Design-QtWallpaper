@@ -40,11 +40,14 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
-                item.setChecked(true);
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                if (item.getGroupId() == R.id.group_tab) {
+                    item.setChecked(true);
+                }
+//                mDrawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });

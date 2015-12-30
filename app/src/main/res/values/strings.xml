@@ -3,4 +3,14 @@
 
     <!-- MainActivity-->
     <string name="hot">热门</string>
+    <string name="category">分类</string>
+
+    <!-- Navi-->
+    <string name="login">微信登录</string>
+    <string name="my_star">我的收藏</string>
+    <string name="clear_trash">清除缓存</string>
+    <string name="feedback">意见反馈</string>
+    <string name="support_qt_wall_paper">支持晴天壁纸</string>
+    <string name="about_qt_wall_paper">关于晴天壁纸</string>
+    <string name="logout">注销</string>
 </resources>

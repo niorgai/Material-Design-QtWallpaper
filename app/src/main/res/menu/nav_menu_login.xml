@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/login" android:checkableBehavior="none">
+        <item android:icon="@drawable/menu_wechat"
+            android:title="@string/login"/>
+    </group>
+
+    <group android:id="@+id/group_tab" android:checkableBehavior="single">
+        <item android:icon="@drawable/selector_menu_hot"
+            android:checked="true"
+            android:title="@string/hot"/>
+
+        <item android:icon="@drawable/selector_menu_category"
+            android:title="@string/category"/>
+    </group>
+
+    <group android:id="@+id/group_personal" android:checkableBehavior="none">
+
+        <item android:icon="@drawable/menu_trash"
+            android:title="@string/clear_trash"/>
+
+        <item android:icon="@drawable/menu_feedback"
+            android:title="@string/feedback"/>
+
+        <item android:icon="@drawable/menu_support"
+            android:title="@string/support_qt_wall_paper"/>
+
+        <item android:icon="@drawable/menu_about"
+            android:title="@string/about_qt_wall_paper"/>
+    </group>
+
+</menu>

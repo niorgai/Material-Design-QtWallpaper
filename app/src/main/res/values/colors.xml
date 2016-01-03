@@ -5,4 +5,14 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="commonWhite">#FFFFFF</color>
+
+    <!-- holder-->
+    <color name="holder1">#AAC3DE</color>
+    <color name="holder2">#B3CFC6</color>
+    <color name="holder3">#9592AA</color>
+    <color name="holder4">#A8DDC7</color>
+    <color name="holder5">#928087</color>
+    <color name="holder6">#E7F1FE</color>
+    <color name="holder7">#F7F3CE</color>
+    <color name="holder8">#A191AE</color>
 </resources>

@@ -6,16 +6,24 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.adapter.GridAdapter;
 
 public class MainActivity extends AppCompatActivity {
     public static final int PAGE_HOT = 0;
     public static final int PAGE_CATEGORY = 1;
 
     private DrawerLayout mDrawerLayout;
+    private RecyclerView mRecylerView;
+
+    //热门
+    private GridAdapter mHotAdapter;
+    private GridLayoutManager mHotManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +55,19 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getGroupId() == R.id.group_tab) {
                     item.setChecked(true);
                 }
-//                mDrawerLayout.closeDrawer(GravityCompat.START);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
                 return true;
             }
         });
+
+        mRecylerView = (RecyclerView) findViewById(R.id.recycler_view);
     }
 
     private void initData() {
+        mHotManager = new GridLayoutManager(this, 2);
+        mHotAdapter = new GridAdapter(this);
+        mRecylerView.setAdapter(mHotAdapter);
+        mRecylerView.setLayoutManager(mHotManager);
     }
 
     @Override

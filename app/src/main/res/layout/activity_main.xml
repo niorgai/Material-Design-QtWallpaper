@@ -30,11 +30,9 @@
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <FrameLayout
+            android:id="@+id/container"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_marginBottom="@dimen/item_grid_padding_big"
-            android:clipToPadding="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </android.support.design.widget.CoordinatorLayout>

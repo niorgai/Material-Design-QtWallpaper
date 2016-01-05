@@ -7,11 +7,15 @@
     </group>
 
     <group android:id="@+id/group_tab" android:checkableBehavior="single">
-        <item android:icon="@drawable/selector_menu_hot"
+        <item
+            android:id="@+id/hot"
+            android:icon="@drawable/selector_menu_hot"
             android:checked="true"
             android:title="@string/hot"/>
 
-        <item android:icon="@drawable/selector_menu_category"
+        <item
+            android:id="@+id/category"
+            android:icon="@drawable/selector_menu_category"
             android:title="@string/category"/>
     </group>
 

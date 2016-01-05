@@ -2,28 +2,29 @@ package us.wili.qtwallpaper.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseArray;
 import android.view.MenuItem;
 
 import us.wili.qtwallpaper.R;
-import us.wili.qtwallpaper.adapter.GridAdapter;
+import us.wili.qtwallpaper.fragment.HotFragment;
 
 public class MainActivity extends AppCompatActivity {
     public static final int PAGE_HOT = 0;
     public static final int PAGE_CATEGORY = 1;
+    private SparseArray<Fragment> mFragments;
 
     private DrawerLayout mDrawerLayout;
-    private RecyclerView mRecylerView;
 
-    //热门
-    private GridAdapter mHotAdapter;
-    private GridLayoutManager mHotManager;
+    private int mContainer;
+
+    private int currentTab = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +61,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mRecylerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mContainer = R.id.container;
+
+        mFragments = new SparseArray<>();
+        mFragments.put(PAGE_HOT, new HotFragment());
     }
 
     private void initData() {
-        mHotManager = new GridLayoutManager(this, 2);
-        mHotAdapter = new GridAdapter(this);
-        mRecylerView.setAdapter(mHotAdapter);
-        mRecylerView.setLayoutManager(mHotManager);
+        //选中hot
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(mContainer, mFragments.get(PAGE_HOT));
+        ft.commit();
+        currentTab = PAGE_HOT;
+    }
+
+    /**
+     * 改变选项卡
+     * @param tab PAGE_HOT / PAGE_CATEGORY
+     */
+    private void changeTab(int tab) {
+        if (currentTab == tab) {
+            return;
+        }
+        Fragment nextFragment = mFragments.get(tab);
+        if (nextFragment == null) {
+            return;
+        }
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (!nextFragment.isAdded()) {
+            ft.add(mContainer, nextFragment);
+        }
+        ft.hide(mFragments.get(currentTab));
+        ft.show(nextFragment);
+        if (!isFinishing()) {
+            ft.commitAllowingStateLoss();
+        }
+        currentTab = tab;
     }
 
     @Override
@@ -75,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.hot:
+                changeTab(PAGE_HOT);
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -6,9 +6,9 @@
     android:layout_marginStart="@dimen/item_grid_padding_big"
     android:layout_marginRight="@dimen/item_grid_padding_small"
     android:layout_marginEnd="@dimen/item_grid_padding_small"
-    android:layout_marginTop="@dimen/item_grid_padding_big"
+    android:layout_marginTop="@dimen/item_grid_padding_top"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="@dimen/shadow">
+    app:cardElevation="@dimen/item_grid_shadow">
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/drawee_view"
         xmlns:fresco="http://schemas.android.com/apk/res-auto"

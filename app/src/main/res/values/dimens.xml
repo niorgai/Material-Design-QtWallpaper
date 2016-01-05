@@ -3,8 +3,11 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="item_grid_padding_big">10dp</dimen>
-    <dimen name="item_grid_padding_small">5dp</dimen>
+    <!-- Grid View item的阴影适配-->
+    <dimen name="item_grid_padding_big">5dp</dimen>
+    <dimen name="item_grid_padding_small">0dp</dimen>
+    <dimen name="item_grid_padding_top">0dp</dimen>
+    <dimen name="item_grid_padding_bottom_compat">0dp</dimen>
+    <dimen name="item_grid_shadow">5dp</dimen>
 
-    <dimen name="shadow">4dp</dimen>
 </resources>

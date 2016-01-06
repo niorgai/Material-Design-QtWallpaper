@@ -7,10 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import us.wili.qtwallpaper.R;
@@ -66,13 +65,11 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
             mSimpleDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.drawee_view);
             mSimpleDraweeView.setAspectRatio(0.56f);
             //set random loading color
-            DraweeController controller = Fresco.newDraweeControllerBuilder().setOldController(mSimpleDraweeView.getController()).build();
             GenericDraweeHierarchy draweeHierarchy = mSimpleDraweeView.getHierarchy();
             if (draweeHierarchy == null) {
-                draweeHierarchy = new GenericDraweeHierarchyBuilder(mContext.getResources()).setFadeDuration(400).build();
+                draweeHierarchy = new GenericDraweeHierarchyBuilder(mContext.getResources()).build();
             }
-            controller.setHierarchy(draweeHierarchy);
-            mSimpleDraweeView.setController(controller);
+            draweeHierarchy.setActualImageScaleType(ScalingUtils.ScaleType.FIT_XY);
         }
     }
 }

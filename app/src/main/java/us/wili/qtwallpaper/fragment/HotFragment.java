@@ -43,5 +43,6 @@ public class HotFragment extends Fragment {
         mHotAdapter = new GridAdapter(getContext());
         mRecylerView.setAdapter(mHotAdapter);
         mRecylerView.setLayoutManager(mHotManager);
+        mRecylerView.setHasFixedSize(true);
     }
 }

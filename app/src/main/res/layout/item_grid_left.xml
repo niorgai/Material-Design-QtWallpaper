@@ -11,9 +11,9 @@
     app:cardElevation="@dimen/item_grid_shadow">
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/drawee_view"
-        xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
         fresco:failureImage="@drawable/common_holder"
         android:layout_height="wrap_content">
     </com.facebook.drawee.view.SimpleDraweeView>

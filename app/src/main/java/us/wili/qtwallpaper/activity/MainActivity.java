@@ -13,9 +13,10 @@ import android.util.SparseArray;
 import android.view.MenuItem;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.fragment.CategoryFragment;
 import us.wili.qtwallpaper.fragment.HotFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final int PAGE_HOT = 0;
     public static final int PAGE_CATEGORY = 1;
     private SparseArray<Fragment> mFragments;
@@ -50,21 +51,13 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setItemIconTintList(null);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                if (item.getGroupId() == R.id.group_tab) {
-                    item.setChecked(true);
-                }
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
+        navigationView.setNavigationItemSelectedListener(this);
 
         mContainer = R.id.container;
 
         mFragments = new SparseArray<>();
         mFragments.put(PAGE_HOT, new HotFragment());
+        mFragments.put(PAGE_CATEGORY, new CategoryFragment());
     }
 
     private void initData() {
@@ -105,10 +98,27 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        if (item.getGroupId() == R.id.group_tab) {
+            item.setChecked(true);
+        }
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        switch (item.getItemId()) {
             case R.id.hot:
                 changeTab(PAGE_HOT);
                 return true;
+            case R.id.category:
+                changeTab(PAGE_CATEGORY);
+                return true;
+            default:
+                break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 }

@@ -34,7 +34,6 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
 
     //热门
     private HotAdapter mHotAdapter;
-    private GridLayoutManager mHotManager;
 
     private WeakHandler mRefreshHandler;
     private static final int REFRESH_COMPLETE = 1;
@@ -59,11 +58,9 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mHotManager = new GridLayoutManager(getContext(), 2);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mHotAdapter = new HotAdapter(getContext());
         mRecyclerView.setAdapter(mHotAdapter);
-        mRecyclerView.setLayoutManager(mHotManager);
-        mRecyclerView.setHasFixedSize(true);
 
         mRefreshHandler = new WeakHandler(this);
         onRefresh();
@@ -86,7 +83,7 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                 }
                 AVQuery<WallpaperItem> gridQuery = AVQuery.getQuery(WallpaperItem.class);
                 gridQuery.orderByAscending("order");
-                gridQuery.limit(10);
+                gridQuery.limit(50);
                 try {
                     mItemList = gridQuery.find();
                 } catch (AVException e) {
@@ -113,15 +110,6 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                 fragment.mHotAdapter.setBanners(fragment.mBanner);
                 fragment.mHotAdapter.setWallPaper(fragment.mItemList);
                 fragment.mRefreshLayout.setRefreshing(false);
-                fragment.mHotManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                    @Override
-                    public int getSpanSize(int position) {
-                        if (position == 0) {
-
-                        }
-                        return 1;
-                    }
-                });
             }
         }
     }

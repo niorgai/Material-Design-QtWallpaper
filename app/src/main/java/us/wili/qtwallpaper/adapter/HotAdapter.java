@@ -3,23 +3,33 @@ package us.wili.qtwallpaper.adapter;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.global.MobileConfig;
 import us.wili.qtwallpaper.model.CategoryItem;
 import us.wili.qtwallpaper.model.WallpaperItem;
 import us.wili.qtwallpaper.utils.PictureUtils;
+import us.wili.qtwallpaper.utils.UIUtils;
+import us.wili.qtwallpaper.widget.UnlimitedViewPager;
 
 /**
  * Common Grid Adapter
@@ -78,7 +88,7 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
         if (manager != null && manager instanceof GridLayoutManager) {
             final GridLayoutManager gridLayoutManager = (GridLayoutManager) manager;
-            final GridLayoutManager.SpanSizeLookup originLookup = ((GridLayoutManager) manager).getSpanSizeLookup();
+            final GridLayoutManager.SpanSizeLookup originLookup = gridLayoutManager.getSpanSizeLookup();
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
@@ -119,7 +129,7 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof BannerViewHolder) {
-
+//            bindBannerViewHolder((BannerViewHolder) holder, position);
         } else if (holder instanceof GridViewHolder) {
             GridViewHolder viewHolder = (GridViewHolder) holder;
             viewHolder.mSimpleDraweeView.getHierarchy().setPlaceholderImage(new ColorDrawable(PictureUtils.getRandomColor(mContext)));
@@ -136,10 +146,101 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return offset + itemSize;
     }
 
-    class BannerViewHolder extends RecyclerView.ViewHolder {
+    private void bindBannerViewHolder(BannerViewHolder holder, int position) {
+        holder.mViewPager.stopAutoScroll();
+        holder.mDotsLayout.removeAllViewsInLayout();
+        holder.mData.clear();
+        holder.mDots.clear();
+        holder.preIndex = 0;
+        SimpleDraweeView draweeView;
+
+        for (int i = 0; i < mBanners.size(); i++) {
+            draweeView = new SimpleDraweeView(mContext);
+//            Uri uri = Uri.parse(mBanners.get(i).coverUrl);
+//            DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                    .setImageRequest(ImageRequestBuilder.newBuilderWithSource(uri).build())
+//                    .setOldController(draweeView.getController())
+//                    .build();
+//            draweeView.setController(controller);
+//            draweeView.setOnClickListener(holder);
+//            draweeView.setTag(mBanners.get(i).objectId);
+            holder.mData.add(draweeView);
+
+            if (mBanners.size() > 1) {
+                ImageView imageView = new ImageView(mContext);
+                if (i == 0) {
+                    imageView.setImageResource(R.drawable.dot_focused_grey);
+                } else {
+                    imageView.setImageResource(R.drawable.dot_normal_white);
+                }
+                imageView.setLayoutParams(holder.mDotLayoutParams);
+                holder.mDots.put(i, imageView);
+                holder.mDotsLayout.addView(imageView);
+            }
+        }
+        if (mBanners.size() == 2) {
+            //少于3张时限滚动效果不好,需要加一个假数据
+            draweeView = new SimpleDraweeView(mContext);
+//            Uri uri = Uri.parse(mBanners.get(0).coverUrl);
+//            DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                    .setImageRequest(ImageRequestBuilder.newBuilderWithSource(uri).build())
+//                    .setOldController(draweeView.getController())
+//                    .build();
+//            draweeView.setController(controller);
+//            draweeView.setOnClickListener(holder);
+//            draweeView.setTag(mBanners.get(0).objectId);
+            holder.mData.add(draweeView);
+
+            holder.mViewPager.setAdapterData(holder.mData, 2);
+        } else {
+            holder.mViewPager.setAdapterData(holder.mData, holder.mData.size());
+        }
+    }
+
+    class BannerViewHolder extends RecyclerView.ViewHolder implements ViewPager.OnPageChangeListener, View.OnClickListener {
+        UnlimitedViewPager mViewPager;
+        LinearLayout mDotsLayout;
+        List<View> mData = new ArrayList<>();
+        SparseArray<ImageView> mDots = new SparseArray<>();
+        LinearLayout.LayoutParams mDotLayoutParams;
+        int preIndex = 0;
 
         public BannerViewHolder(View itemView) {
             super(itemView);
+            mViewPager = (UnlimitedViewPager) itemView.findViewById(R.id.view_pager);
+            mDotsLayout = (LinearLayout) itemView.findViewById(R.id.dots_layout);
+
+            mViewPager.addOnPageChangeListener(this);
+            int params = UIUtils.dip2px(mContext, 6);
+            mDotLayoutParams = new LinearLayout.LayoutParams(params,params);
+            mDotLayoutParams.setMargins(params / 2, 0, params / 2, 0);
+
+            int height = (int) ((MobileConfig.screenWidth / 640f) * 380f);
+            mViewPager.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            mDots.get(preIndex).setImageResource(R.drawable.dot_normal_white);
+            mDots.get(mViewPager.getCurrentPos()).setImageResource(R.drawable.dot_focused_grey);
+            preIndex = mViewPager.getCurrentPos();
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v.getTag() != null) {
+                Log.d("tag: ", v.getTag().toString());
+            }
         }
     }
 

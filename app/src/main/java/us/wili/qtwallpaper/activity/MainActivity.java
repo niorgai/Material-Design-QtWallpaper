@@ -9,12 +9,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.view.MenuItem;
 
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.fragment.CategoryFragment;
 import us.wili.qtwallpaper.fragment.HotFragment;
+import us.wili.qtwallpaper.global.MobileConfig;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final int PAGE_HOT = 0;
@@ -30,6 +32,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //初始化屏幕宽度
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        MobileConfig.screenWidth = metrics.widthPixels;
+        MobileConfig.screenHeight = metrics.heightPixels;
 
         initViews();
 

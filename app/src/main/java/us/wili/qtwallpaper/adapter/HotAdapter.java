@@ -26,6 +26,7 @@ import java.util.List;
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.global.MobileConfig;
 import us.wili.qtwallpaper.model.CategoryItem;
+import us.wili.qtwallpaper.model.ViewPagerModel;
 import us.wili.qtwallpaper.model.WallpaperItem;
 import us.wili.qtwallpaper.utils.PictureUtils;
 import us.wili.qtwallpaper.utils.UIUtils;
@@ -129,7 +130,7 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof BannerViewHolder) {
-//            bindBannerViewHolder((BannerViewHolder) holder, position);
+            bindBannerViewHolder((BannerViewHolder) holder, position);
         } else if (holder instanceof GridViewHolder) {
             GridViewHolder viewHolder = (GridViewHolder) holder;
             viewHolder.mSimpleDraweeView.getHierarchy().setPlaceholderImage(new ColorDrawable(PictureUtils.getRandomColor(mContext)));
@@ -149,22 +150,13 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void bindBannerViewHolder(BannerViewHolder holder, int position) {
         holder.mViewPager.stopAutoScroll();
         holder.mDotsLayout.removeAllViewsInLayout();
-        holder.mData.clear();
         holder.mDots.clear();
         holder.preIndex = 0;
-        SimpleDraweeView draweeView;
 
+        List<ViewPagerModel> models = new ArrayList<>();
         for (int i = 0; i < mBanners.size(); i++) {
-            draweeView = new SimpleDraweeView(mContext);
-//            Uri uri = Uri.parse(mBanners.get(i).coverUrl);
-//            DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                    .setImageRequest(ImageRequestBuilder.newBuilderWithSource(uri).build())
-//                    .setOldController(draweeView.getController())
-//                    .build();
-//            draweeView.setController(controller);
-//            draweeView.setOnClickListener(holder);
-//            draweeView.setTag(mBanners.get(i).objectId);
-            holder.mData.add(draweeView);
+            CategoryItem item = mBanners.get(i);
+            models.add(new ViewPagerModel(item.coverUrl, item.objectId));
 
             if (mBanners.size() > 1) {
                 ImageView imageView = new ImageView(mContext);
@@ -180,27 +172,18 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
         if (mBanners.size() == 2) {
             //少于3张时限滚动效果不好,需要加一个假数据
-            draweeView = new SimpleDraweeView(mContext);
-//            Uri uri = Uri.parse(mBanners.get(0).coverUrl);
-//            DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                    .setImageRequest(ImageRequestBuilder.newBuilderWithSource(uri).build())
-//                    .setOldController(draweeView.getController())
-//                    .build();
-//            draweeView.setController(controller);
-//            draweeView.setOnClickListener(holder);
-//            draweeView.setTag(mBanners.get(0).objectId);
-            holder.mData.add(draweeView);
+            CategoryItem item = mBanners.get(0);
+            models.add(new ViewPagerModel(item.coverUrl, item.objectId));
 
-            holder.mViewPager.setAdapterData(holder.mData, 2);
+            holder.mViewPager.setAdapterData(models, 2);
         } else {
-            holder.mViewPager.setAdapterData(holder.mData, holder.mData.size());
+            holder.mViewPager.setAdapterData(models, models.size());
         }
     }
 
     class BannerViewHolder extends RecyclerView.ViewHolder implements ViewPager.OnPageChangeListener, View.OnClickListener {
         UnlimitedViewPager mViewPager;
         LinearLayout mDotsLayout;
-        List<View> mData = new ArrayList<>();
         SparseArray<ImageView> mDots = new SparseArray<>();
         LinearLayout.LayoutParams mDotLayoutParams;
         int preIndex = 0;

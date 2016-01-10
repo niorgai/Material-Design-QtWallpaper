@@ -6,7 +6,6 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
@@ -14,7 +13,8 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import us.wili.qtwallpaper.adapter.UnlimitedPagerAdapter;
+import us.wili.qtwallpaper.adapter.UnlimitedBannerAdapter;
+import us.wili.qtwallpaper.model.ViewPagerModel;
 
 /**
  * 数据大于1时
@@ -26,9 +26,9 @@ public class UnlimitedViewPager extends ViewPager {
 
     private static final int SCROLL_TIME = 3000;
 
-    private UnlimitedPagerAdapter mAdapter;
+    private UnlimitedBannerAdapter mAdapter;
 
-    private List<View> data;
+    private List<ViewPagerModel> data;
 
     private boolean isScrolling = false;
 
@@ -53,14 +53,14 @@ public class UnlimitedViewPager extends ViewPager {
      * 设置数据,当数据大于1开启自动轮播
      * 数据小于3时需要添加到3个,否则滑动效果不好
      */
-    public void setAdapterData(List<View> views, int dataSize) {
+    public void setAdapterData(List<ViewPagerModel> views, int dataSize) {
         stopAutoScroll();
         this.data = views;
         this.dataSize = dataSize;
         setCurrentItem(Integer.MAX_VALUE / 2 - ((Integer.MAX_VALUE / 2) % dataSize));
         setOffscreenPageLimit(1);
         if (mAdapter == null) {
-            mAdapter = new UnlimitedPagerAdapter(data);
+            mAdapter = new UnlimitedBannerAdapter(getContext(), data);
             setAdapter(mAdapter);
         } else {
             mAdapter.notifyDataSetChanged();

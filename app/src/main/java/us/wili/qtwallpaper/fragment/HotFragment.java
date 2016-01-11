@@ -82,7 +82,7 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                     return;
                 }
                 AVQuery<WallpaperItem> gridQuery = AVQuery.getQuery(WallpaperItem.class);
-                gridQuery.orderByAscending("order");
+                gridQuery.orderByDescending("downloads");
                 gridQuery.limit(50);
                 try {
                     mItemList = gridQuery.find();

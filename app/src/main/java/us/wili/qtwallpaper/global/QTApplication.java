@@ -1,10 +1,12 @@
 package us.wili.qtwallpaper.global;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 
 import us.wili.qtwallpaper.model.CategoryItem;
 import us.wili.qtwallpaper.model.WallpaperItem;
@@ -20,7 +22,11 @@ public class QTApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Fresco.initialize(this);
+        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
+                .setDownsampleEnabled(true)
+                .setBitmapsConfig(Bitmap.Config.RGB_565)
+                .build();
+        Fresco.initialize(this, config);
 
         AVObject.registerSubclass(CategoryItem.class);
         AVObject.registerSubclass(WallpaperItem.class);

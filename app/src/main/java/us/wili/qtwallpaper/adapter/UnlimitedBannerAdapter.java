@@ -7,7 +7,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +28,27 @@ public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClick
     private List<ViewPagerModel> data;
 
     private SimpleDraweeView[] mViews;
+    private ResizeOptions bannerResizeOption;
 
-    public UnlimitedBannerAdapter(Context context, List<ViewPagerModel> data) {
-        this.data = data;
-        if (this.data == null) {
-            this.data = new ArrayList<>();
-        }
+    public UnlimitedBannerAdapter(Context context) {
         mViews = new SimpleDraweeView[3];
         for (int i = 0; i < mViews.length; i++) {
             mViews[i] = new SimpleDraweeView(context);
             mViews[i].setOnClickListener(this);
         }
+        data = new ArrayList<>();
+    }
+
+    public void setData(List<ViewPagerModel> data) {
+        this.data = data;
+        if (this.data == null) {
+            this.data = new ArrayList<>();
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setBannerSize(int width, int height) {
+        bannerResizeOption = new ResizeOptions(width, height);
     }
 
     @Override
@@ -57,7 +72,14 @@ public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClick
         container.addView(view);
         SimpleDraweeView draweeViw = (SimpleDraweeView) view;
         ViewPagerModel model = data.get(position % data.size());
-        draweeViw.setImageURI(Uri.parse(model.imageUrl));
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(model.imageUrl))
+                .setResizeOptions(bannerResizeOption)
+                .build();
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(request)
+                .setOldController(draweeViw.getController())
+                .build();
+        draweeViw.setController(controller);
         draweeViw.setTag(model.objectId);
         return view;
     }

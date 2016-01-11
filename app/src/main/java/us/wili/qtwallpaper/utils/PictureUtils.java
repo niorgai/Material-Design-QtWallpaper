@@ -12,6 +12,8 @@ import us.wili.qtwallpaper.R;
  */
 public class PictureUtils {
 
+    public static final String COMPRESS_20 = "?imageMogr2/thumbnail/!20p";
+
     public static int getRandomColor(Context context) {
         int randomColor = new Random().nextInt() % 8;
         switch (randomColor) {

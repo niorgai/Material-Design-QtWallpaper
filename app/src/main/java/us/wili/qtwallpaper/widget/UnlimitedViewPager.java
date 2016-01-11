@@ -11,10 +11,6 @@ import android.widget.Scroller;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
-import java.util.List;
-
-import us.wili.qtwallpaper.adapter.UnlimitedBannerAdapter;
-import us.wili.qtwallpaper.model.ViewPagerModel;
 
 /**
  * 数据大于1时
@@ -26,10 +22,6 @@ public class UnlimitedViewPager extends ViewPager {
 
     private static final int SCROLL_TIME = 3000;
 
-    private UnlimitedBannerAdapter mAdapter;
-
-    private List<ViewPagerModel> data;
-
     private boolean isScrolling = false;
 
     private WeakHandler mScrollHandler = new WeakHandler(this);
@@ -37,7 +29,7 @@ public class UnlimitedViewPager extends ViewPager {
     private int dataSize = 0;
 
     public int getCurrentPos() {
-        return data == null ? getCurrentItem() : getCurrentItem() % dataSize;
+        return dataSize <= 1 ? getCurrentItem() : getCurrentItem() % dataSize;
     }
 
     public UnlimitedViewPager(Context context) {
@@ -47,25 +39,16 @@ public class UnlimitedViewPager extends ViewPager {
     public UnlimitedViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         setViewPagerScrollTime();
+        setOffscreenPageLimit(1);
     }
 
     /**
      * 设置数据,当数据大于1开启自动轮播
      * 数据小于3时需要添加到3个,否则滑动效果不好
      */
-    public void setAdapterData(List<ViewPagerModel> views, int dataSize) {
-        stopAutoScroll();
-        this.data = views;
+    public void setAdapterDataSize(int dataSize) {
         this.dataSize = dataSize;
-        setCurrentItem(Integer.MAX_VALUE / 2 - ((Integer.MAX_VALUE / 2) % dataSize));
-        setOffscreenPageLimit(1);
-        if (mAdapter == null) {
-            mAdapter = new UnlimitedBannerAdapter(getContext(), data);
-            setAdapter(mAdapter);
-        } else {
-            mAdapter.notifyDataSetChanged();
-        }
-        if (data.size() > 1) {
+        if (dataSize > 1) {
             startAutoScroll();
         }
     }
@@ -74,7 +57,7 @@ public class UnlimitedViewPager extends ViewPager {
      * 开始自动轮播
      */
     private void startAutoScroll() {
-        if (data != null && data.size() > 1 && !isScrolling) {
+        if (dataSize > 1 && !isScrolling) {
             isScrolling = true;
             mScrollHandler.sendEmptyMessageDelayed(MESSAGE_SCROLL, SCROLL_TIME);
         }
@@ -84,7 +67,7 @@ public class UnlimitedViewPager extends ViewPager {
      * 停止自动轮播
      */
     public void stopAutoScroll() {
-        if (data != null && data.size() > 1) {
+        if (dataSize > 1) {
             isScrolling = false;
             mScrollHandler.removeMessages(MESSAGE_SCROLL);
         }

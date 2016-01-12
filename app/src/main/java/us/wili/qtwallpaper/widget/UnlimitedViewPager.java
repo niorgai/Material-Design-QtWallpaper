@@ -63,6 +63,14 @@ public class UnlimitedViewPager extends ViewPager {
         }
     }
 
+    public void startAutoScrollImmediately() {
+        if (dataSize > 1) {
+            stopAutoScroll();
+            mScrollHandler.sendEmptyMessage(MESSAGE_SCROLL);
+            isScrolling = true;
+        }
+    }
+
     /**
      * 停止自动轮播
      */

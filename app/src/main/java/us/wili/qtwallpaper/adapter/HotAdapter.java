@@ -190,13 +190,17 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 models.add(new ViewPagerModel(item.coverUrl, item.objectId));
             }
 
+            holder.mAdapter.setData(models);
             holder.mViewPager.setAdapterDataSize(2);
-            holder.mAdapter.setData(models);
-            holder.mViewPager.setCurrentItem(Integer.MAX_VALUE / 2 - ((Integer.MAX_VALUE / 2) % 2));
+            int mid = Integer.MAX_VALUE / 2 - ((Integer.MAX_VALUE / 2) % 2);
+            holder.mViewPager.setCurrentItem(mid - 1, false);
+            holder.mViewPager.startAutoScrollImmediately();
         } else {
-            holder.mViewPager.setAdapterDataSize(models.size());
             holder.mAdapter.setData(models);
-            holder.mViewPager.setCurrentItem(Integer.MAX_VALUE / 2 - ((Integer.MAX_VALUE / 2) % models.size()));
+            holder.mViewPager.setAdapterDataSize(models.size());
+            int mid = Integer.MAX_VALUE / 2 - ((Integer.MAX_VALUE / 2) % models.size());
+            holder.mViewPager.setCurrentItem(mid - 1, false);
+            holder.mViewPager.startAutoScrollImmediately();
         }
     }
 

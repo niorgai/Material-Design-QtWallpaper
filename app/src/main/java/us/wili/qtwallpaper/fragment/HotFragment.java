@@ -77,7 +77,6 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                 try {
                     mBanner = bannerQuery.find();
                 } catch (AVException e) {
-                    e.printStackTrace();
                     mRefreshHandler.sendEmptyMessage(REFRESH_COMPLETE);
                     return;
                 }
@@ -87,7 +86,7 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
                 try {
                     mItemList = gridQuery.find();
                 } catch (AVException e) {
-                    e.printStackTrace();
+                    mRefreshHandler.sendEmptyMessage(REFRESH_COMPLETE);
                 }
                 mRefreshHandler.sendEmptyMessage(REFRESH_COMPLETE);
             }

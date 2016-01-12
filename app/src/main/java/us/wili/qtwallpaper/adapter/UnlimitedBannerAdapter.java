@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
@@ -34,6 +35,7 @@ public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClick
         mViews = new SimpleDraweeView[3];
         for (int i = 0; i < mViews.length; i++) {
             mViews[i] = new SimpleDraweeView(context);
+            mViews[i].setHierarchy(GenericDraweeHierarchyBuilder.newInstance(context.getResources()).setFadeDuration(0).build());
             mViews[i].setOnClickListener(this);
         }
         data = new ArrayList<>();

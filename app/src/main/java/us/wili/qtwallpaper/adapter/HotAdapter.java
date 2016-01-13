@@ -183,23 +183,10 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 holder.mDotsLayout.addView(imageView);
             }
         }
-        if (mBanners.size() == 2) {
-            //少于3张时限滚动效果不好,需要加两个假数据
-            for (int i = 0; i < mBanners.size(); i++) {
-                CategoryItem item = mBanners.get(i);
-                models.add(new ViewPagerModel(item.coverUrl, item.objectId));
-            }
-
-            holder.mAdapter.setData(models);
-            holder.mViewPager.setAdapterDataSize(2);
-            int mid = Integer.MAX_VALUE / 2 - ((Integer.MAX_VALUE / 2) % 2);
-            holder.mViewPager.setCurrentItem(mid - 1, false);
-        } else {
-            holder.mAdapter.setData(models);
-            holder.mViewPager.setAdapterDataSize(models.size());
-            int mid = Integer.MAX_VALUE / 2 - ((Integer.MAX_VALUE / 2) % models.size());
-            holder.mViewPager.setCurrentItem(mid, false);
-        }
+        holder.mAdapter.setData(models);
+        holder.mViewPager.setAdapterDataSize(models.size());
+        int mid = Integer.MAX_VALUE / 2 - ((Integer.MAX_VALUE / 2) % models.size());
+        holder.mViewPager.setCurrentItem(mid, false);
     }
 
     class BannerViewHolder extends RecyclerView.ViewHolder implements ViewPager.OnPageChangeListener, View.OnClickListener {

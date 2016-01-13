@@ -46,6 +46,9 @@ public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClick
         if (this.data == null) {
             this.data = new ArrayList<>();
         }
+        if (mViews[0].getParent() != null) {
+            View view = (View) mViews[0].getParent();
+        }
         notifyDataSetChanged();
     }
 
@@ -89,6 +92,11 @@ public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClick
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
 
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     @Override

@@ -2,17 +2,24 @@ package us.wili.qtwallpaper.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.drawee.drawable.ScalingUtils;
-import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+
+import java.util.List;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.global.MobileConfig;
+import us.wili.qtwallpaper.model.CategoryItem;
 import us.wili.qtwallpaper.utils.PictureUtils;
 
 /**
@@ -23,10 +30,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
     private Context mContext;
     private LayoutInflater mInflater;
+    private ResizeOptions options;
+
+    private List<CategoryItem> items;
 
     public ListAdapter(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
+        int height = (MobileConfig.screenWidth / 640) * 380;
+        options = new ResizeOptions(MobileConfig.screenWidth, height);
+    }
+
+    public void update(List<CategoryItem> items) {
+        this.items = items;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -37,11 +54,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
     @Override
     public void onBindViewHolder(ListViewHolder holder, int position) {
         holder.mSimpleDraweeView.getHierarchy().setPlaceholderImage(new ColorDrawable(PictureUtils.getRandomColor(mContext)));
+        CategoryItem item = items.get(position);
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(item.coverUrl))
+                .setResizeOptions(options).build();
+        DraweeController controller = Fresco.newDraweeControllerBuilder().setImageRequest(request)
+                .setOldController(holder.mSimpleDraweeView.getController()).build();
+        holder.mSimpleDraweeView.setController(controller);
     }
 
     @Override
     public int getItemCount() {
-        return 100;
+        return items == null ? 0 : items.size();
     }
 
     class ListViewHolder extends RecyclerView.ViewHolder {
@@ -50,13 +73,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         public ListViewHolder(View itemView) {
             super(itemView);
             mSimpleDraweeView = (SimpleDraweeView) itemView;
-            mSimpleDraweeView.setAspectRatio(1.684210526f);
-            //set random loading color
-            GenericDraweeHierarchy draweeHierarchy = mSimpleDraweeView.getHierarchy();
-            if (draweeHierarchy == null) {
-                draweeHierarchy = new GenericDraweeHierarchyBuilder(mContext.getResources()).build();
-            }
-            draweeHierarchy.setActualImageScaleType(ScalingUtils.ScaleType.FIT_XY);
         }
     }
 }

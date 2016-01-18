@@ -1,5 +1,7 @@
 package us.wili.qtwallpaper.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -8,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -36,6 +39,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
     private List<CategoryItem> items;
 
+    //for animation
+    private int lastAnimatedPosition = -1;
+    private boolean isFirstPageLoadFinish = false;
+
     public ListAdapter(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -45,6 +52,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
     public void update(List<CategoryItem> items) {
         this.items = items;
+        lastAnimatedPosition = -1;
+        isFirstPageLoadFinish = false;
         notifyDataSetChanged();
     }
 
@@ -55,6 +64,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
 
     @Override
     public void onBindViewHolder(ListViewHolder holder, int position) {
+        runEnterAnimation(holder.itemView, position);
         holder.mSimpleDraweeView.getHierarchy().setPlaceholderImage(new ColorDrawable(PictureUtils.getRandomColor(mContext)));
         CategoryItem item = items.get(position);
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(item.coverUrl))
@@ -62,6 +72,28 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         DraweeController controller = Fresco.newDraweeControllerBuilder().setImageRequest(request)
                 .setOldController(holder.mSimpleDraweeView.getController()).build();
         holder.mSimpleDraweeView.setController(controller);
+    }
+
+    private void runEnterAnimation(View view, int position) {
+        if (isFirstPageLoadFinish) return;
+
+        if (position > lastAnimatedPosition) {
+            lastAnimatedPosition = position;
+            view.setTranslationY(600);
+            view.setAlpha(0.f);
+            view.animate()
+                    .translationY(0).alpha(1.f)
+                    .setStartDelay(20 * (position))
+                    .setInterpolator(new DecelerateInterpolator(2.f))
+                    .setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            isFirstPageLoadFinish = true;
+                        }
+                    })
+                    .start();
+        }
     }
 
     @Override

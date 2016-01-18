@@ -1,5 +1,7 @@
 package us.wili.qtwallpaper.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,6 +58,10 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ResizeOptions mGridResizeOption;
 
+    //for animation
+    private int lastAnimatedPosition = -1;
+    private boolean isFirstPageLoadFinish = false;
+
     public HotAdapter(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
@@ -89,6 +96,8 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void setWallPaper(List<WallpaperItem> mWallPaper) {
         this.mWallPaper = mWallPaper;
+        lastAnimatedPosition = -1;
+        isFirstPageLoadFinish = false;
         notifyDataSetChanged();
     }
 
@@ -138,6 +147,7 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        runEnterAnimation(holder.itemView, position);
         if (holder instanceof BannerViewHolder) {
             bindBannerViewHolder((BannerViewHolder) holder);
         } else if (holder instanceof GridViewHolder) {
@@ -150,6 +160,28 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             DraweeController controller = Fresco.newDraweeControllerBuilder().setImageRequest(request)
                     .setOldController(viewHolder.mSimpleDraweeView.getController()).build();
             viewHolder.mSimpleDraweeView.setController(controller);
+        }
+    }
+
+    private void runEnterAnimation(View view, int position) {
+        if (isFirstPageLoadFinish) return;
+
+        if (position > lastAnimatedPosition) {
+            lastAnimatedPosition = position;
+            view.setTranslationY(600);
+            view.setAlpha(0.f);
+            view.animate()
+                    .translationY(0).alpha(1.f)
+                    .setStartDelay(20 * (position))
+                    .setInterpolator(new DecelerateInterpolator(2.f))
+                    .setDuration(300)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            isFirstPageLoadFinish = true;
+                        }
+                    })
+                    .start();
         }
     }
 

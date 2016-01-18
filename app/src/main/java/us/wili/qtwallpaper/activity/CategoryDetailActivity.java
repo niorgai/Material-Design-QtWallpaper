@@ -3,8 +3,10 @@ package us.wili.qtwallpaper.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
@@ -43,6 +45,13 @@ public class CategoryDetailActivity extends BaseActivity implements SwipeRefresh
     protected void initViews() {
         super.initViews();
         setContentView(R.layout.activity_category_detail);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.category);
+
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
         UIUtils.changeRefreshLayoutColor(mRefreshLayout);
         mRefreshLayout.setOnRefreshListener(this);

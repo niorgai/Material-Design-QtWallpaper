@@ -85,7 +85,7 @@ public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClick
                 .setOldController(draweeViw.getController())
                 .build();
         draweeViw.setController(controller);
-        draweeViw.setTag(model.objectId);
+        draweeViw.setTag(model);
         return view;
     }
 
@@ -102,8 +102,9 @@ public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClick
     @Override
     public void onClick(View v) {
         Object tag = v.getTag();
-        if (tag != null && tag instanceof String) {
-            Intent intent = CategoryDetailActivity.getIntent(mContext, (String)tag);
+        if (tag != null && tag instanceof ViewPagerModel) {
+            ViewPagerModel model = (ViewPagerModel) tag;
+            Intent intent = CategoryDetailActivity.getIntent(mContext, model.name, model.objectId);
             mContext.startActivity(intent);
         }
     }

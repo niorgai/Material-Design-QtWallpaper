@@ -116,7 +116,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
             if (pos == RecyclerView.NO_POSITION) {
                 return;
             }
-            Intent intent = CategoryDetailActivity.getIntent(mContext, items.get(pos).getObjectId());
+            CategoryItem item = items.get(pos);
+            Intent intent = CategoryDetailActivity.getIntent(mContext, item.name, item.getObjectId());
             mContext.startActivity(intent);
         }
     }

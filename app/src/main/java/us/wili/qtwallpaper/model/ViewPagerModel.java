@@ -6,12 +6,15 @@ package us.wili.qtwallpaper.model;
  */
 public class ViewPagerModel {
 
-    public ViewPagerModel(String url, String id) {
+    public ViewPagerModel(String url, String name, String id) {
         this.imageUrl = url;
+        this.name = name;
         this.objectId = id;
     }
 
     public String imageUrl;
 
-    public String objectId; //use for click
+    public String name;
+
+    public String objectId;
 }

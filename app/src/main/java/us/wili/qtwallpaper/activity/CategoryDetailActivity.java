@@ -3,10 +3,8 @@ package us.wili.qtwallpaper.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
@@ -28,9 +26,11 @@ import us.wili.qtwallpaper.utils.UIUtils;
 public class CategoryDetailActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private final static String CATEGORY_ID = "category_id";
+    private final static String CATEGORY_NAME = "category_name";
 
-    public static Intent getIntent(Context context, String categoryId) {
+    public static Intent getIntent(Context context, String categoryName, String categoryId) {
         Intent intent = new Intent(context, CategoryDetailActivity.class);
+        intent.putExtra(CATEGORY_NAME, categoryName);
         intent.putExtra(CATEGORY_ID, categoryId);
         return intent;
     }
@@ -46,12 +46,6 @@ public class CategoryDetailActivity extends BaseActivity implements SwipeRefresh
         super.initViews();
         setContentView(R.layout.activity_category_detail);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(R.string.category);
-
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
         UIUtils.changeRefreshLayoutColor(mRefreshLayout);
         mRefreshLayout.setOnRefreshListener(this);
@@ -65,7 +59,9 @@ public class CategoryDetailActivity extends BaseActivity implements SwipeRefresh
     @Override
     protected void initData() {
         super.initData();
-        categoryId = getIntent().getStringExtra(CATEGORY_ID);
+        Intent comingIntent = getIntent();
+        setTitle(comingIntent.getStringExtra(CATEGORY_NAME));
+        categoryId = comingIntent.getStringExtra(CATEGORY_ID);
     }
 
     @Override

@@ -201,7 +201,7 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         List<ViewPagerModel> models = new ArrayList<>();
         for (int i = 0; i < mBanners.size(); i++) {
             CategoryItem item = mBanners.get(i);
-            models.add(new ViewPagerModel(item.coverUrl, item.getObjectId()));
+            models.add(new ViewPagerModel(item.coverUrl, item.name, item.getObjectId()));
 
             if (mBanners.size() > 1) {
                 ImageView imageView = new ImageView(mContext);

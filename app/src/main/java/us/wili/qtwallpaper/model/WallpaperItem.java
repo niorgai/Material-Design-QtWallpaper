@@ -24,13 +24,11 @@ public class WallpaperItem extends AVObject {
 
     }
 
-    public String objectId;
-
     public String imageUrl;
 
     public String name;
 
-    public String categoryId;
+    public CategoryItem categoryId;
 
     public int order;
 

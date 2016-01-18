@@ -20,8 +20,6 @@ public class CategoryItem extends AVObject {
 
     }
 
-    public String objectId;
-
     public String name;
 
     public String coverUrl;

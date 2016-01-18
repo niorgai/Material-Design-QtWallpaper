@@ -1,6 +1,7 @@
 package us.wili.qtwallpaper.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import java.util.List;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.activity.CategoryDetailActivity;
 import us.wili.qtwallpaper.global.MobileConfig;
 import us.wili.qtwallpaper.model.CategoryItem;
 import us.wili.qtwallpaper.utils.PictureUtils;
@@ -67,12 +69,23 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListViewHolder
         return items == null ? 0 : items.size();
     }
 
-    class ListViewHolder extends RecyclerView.ViewHolder {
+    class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         SimpleDraweeView mSimpleDraweeView;
 
         public ListViewHolder(View itemView) {
             super(itemView);
             mSimpleDraweeView = (SimpleDraweeView) itemView;
+            mSimpleDraweeView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int pos = getAdapterPosition();
+            if (pos == RecyclerView.NO_POSITION) {
+                return;
+            }
+            Intent intent = CategoryDetailActivity.getIntent(mContext, items.get(pos).getObjectId());
+            mContext.startActivity(intent);
         }
     }
 }

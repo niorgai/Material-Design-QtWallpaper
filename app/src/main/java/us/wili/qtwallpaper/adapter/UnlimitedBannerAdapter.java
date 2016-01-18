@@ -1,9 +1,9 @@
 package us.wili.qtwallpaper.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,6 +18,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import us.wili.qtwallpaper.activity.CategoryDetailActivity;
 import us.wili.qtwallpaper.model.ViewPagerModel;
 
 /**
@@ -26,12 +27,14 @@ import us.wili.qtwallpaper.model.ViewPagerModel;
  */
 public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClickListener {
 
+    private Context mContext;
     private List<ViewPagerModel> data;
 
     private SimpleDraweeView[] mViews;
     private ResizeOptions bannerResizeOption;
 
     public UnlimitedBannerAdapter(Context context) {
+        mContext = context;
         mViews = new SimpleDraweeView[3];
         for (int i = 0; i < mViews.length; i++) {
             mViews[i] = new SimpleDraweeView(context);
@@ -98,11 +101,10 @@ public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        if (v.getTag() != null) {
-            Log.d("tag: " , v.getTag().toString());
-            for (ViewPagerModel model : data) {
-                Log.d("model: ", model.objectId);
-            }
+        Object tag = v.getTag();
+        if (tag != null && tag instanceof String) {
+            Intent intent = CategoryDetailActivity.getIntent(mContext, (String)tag);
+            mContext.startActivity(intent);
         }
     }
 }

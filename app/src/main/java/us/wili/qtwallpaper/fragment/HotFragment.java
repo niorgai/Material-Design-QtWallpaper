@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,12 +21,13 @@ import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.adapter.HotAdapter;
 import us.wili.qtwallpaper.model.CategoryItem;
 import us.wili.qtwallpaper.model.WallpaperItem;
+import us.wili.qtwallpaper.utils.UIUtils;
 
 /**
  * 热门
  * Created by qiu on 1/5/16.
  */
-public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class HotFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -52,17 +52,26 @@ public class HotFragment extends Fragment implements SwipeRefreshLayout.OnRefres
         super.onViewCreated(view, savedInstanceState);
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        mRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        UIUtils.changeRefreshLayoutColor(mRefreshLayout);
+        mRefreshLayout.setOnRefreshListener(this);
+
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         mHotAdapter = new HotAdapter(getContext());
         mRecyclerView.setAdapter(mHotAdapter);
 
         mRefreshHandler = new WeakHandler(this);
+    }
+
+    @Override
+    protected void onDelayLoad() {
+        super.onDelayLoad();
+        mRefreshLayout.setRefreshing(true);
         onRefresh();
     }
 

@@ -8,4 +8,6 @@ public class MobileConfig {
 
     public static int screenWidth;
     public static int screenHeight;
+
+    public static final int EXTRA_SIZE = 300;
 }

@@ -91,7 +91,7 @@ public class HotFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
                 }
                 AVQuery<WallpaperItem> gridQuery = AVQuery.getQuery(WallpaperItem.class);
                 gridQuery.orderByDescending("downloads");
-                gridQuery.limit(50);
+                gridQuery.limit(36);
                 try {
                     mItemList = gridQuery.find();
                 } catch (AVException e) {

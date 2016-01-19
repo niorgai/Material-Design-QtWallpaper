@@ -31,6 +31,5 @@ public class QTApplication extends Application {
         AVObject.registerSubclass(CategoryItem.class);
         AVObject.registerSubclass(WallpaperItem.class);
         AVOSCloud.initialize(this, AVUtils.APP_ID, AVUtils.APP_KEY);
-        AVOSCloud.setDebugLogEnabled(true);
     }
 }

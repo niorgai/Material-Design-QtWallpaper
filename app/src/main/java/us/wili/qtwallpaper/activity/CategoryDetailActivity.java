@@ -76,6 +76,7 @@ public class CategoryDetailActivity extends BaseActivity implements SwipeRefresh
         try {
             CategoryItem item = CategoryItem.createWithoutData(CategoryItem.class, categoryId);
             AVQuery<WallpaperItem> bannerQuery = AVRelation.reverseQuery(WallpaperItem.class, "categoryId", item);
+            bannerQuery.orderByDescending("downloads");
             bannerQuery.findInBackground(new AVCallback<WallpaperItem>() {
                 @Override
                 protected void onSuccess(List<WallpaperItem> list) {
@@ -90,7 +91,7 @@ public class CategoryDetailActivity extends BaseActivity implements SwipeRefresh
                 }
             });
         } catch (AVException e) {
-            e.printStackTrace();
+            mRefreshLayout.setRefreshing(false);
         }
     }
 }

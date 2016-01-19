@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.ViewStub;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.utils.StatusBarCompat;
 
 /**
  * BaseActivity
@@ -26,6 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.setContentView(R.layout.activity_base);
+        StatusBarCompat.compat(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();

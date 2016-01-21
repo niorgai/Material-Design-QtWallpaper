@@ -3,12 +3,12 @@ package us.wili.qtwallpaper.adapter;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.activity.WallPaperDisplayActivity;
 import us.wili.qtwallpaper.global.MobileConfig;
 import us.wili.qtwallpaper.model.CategoryItem;
 import us.wili.qtwallpaper.model.ViewPagerModel;
@@ -54,7 +55,7 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
 
     private List<CategoryItem> mBanners;
-    private List<WallpaperItem> mWallPaper;
+    private ArrayList<WallpaperItem> mWallPaper;
 
     private ResizeOptions mGridResizeOption;
 
@@ -94,7 +95,7 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return !(mBanners == null || mBanners.isEmpty());
     }
 
-    public void setWallPaper(List<WallpaperItem> mWallPaper) {
+    public void setWallPaper(ArrayList<WallpaperItem> mWallPaper) {
         this.mWallPaper = mWallPaper;
         lastAnimatedPosition = -1;
         isFirstPageLoadFinish = false;
@@ -221,7 +222,7 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.mViewPager.setCurrentItem(mid, false);
     }
 
-    class BannerViewHolder extends RecyclerView.ViewHolder implements ViewPager.OnPageChangeListener, View.OnClickListener {
+    class BannerViewHolder extends RecyclerView.ViewHolder implements ViewPager.OnPageChangeListener {
         UnlimitedViewPager mViewPager;
         UnlimitedBannerAdapter mAdapter;
         LinearLayout mDotsLayout;
@@ -262,16 +263,9 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public void onPageScrollStateChanged(int state) {
 
         }
-
-        @Override
-        public void onClick(View v) {
-            if (v.getTag() != null) {
-                Log.d("tag: ", v.getTag().toString());
-            }
-        }
     }
 
-    class GridViewHolder extends RecyclerView.ViewHolder {
+    class GridViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         SimpleDraweeView mSimpleDraweeView;
 
         public GridViewHolder(View itemView) {
@@ -284,6 +278,13 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 draweeHierarchy = new GenericDraweeHierarchyBuilder(mContext.getResources()).build();
             }
             draweeHierarchy.setActualImageScaleType(ScalingUtils.ScaleType.FIT_XY);
+            mSimpleDraweeView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = WallPaperDisplayActivity.getIntent(mContext, mWallPaper, getAdapterPosition());
+            mContext.startActivity(intent);
         }
     }
 }

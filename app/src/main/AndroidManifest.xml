@@ -28,7 +28,11 @@
 
         <activity android:name=".activity.CategoryDetailActivity"
             android:exported="false"
-            android:configChanges="keyboard"/>
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
+        <activity android:name=".activity.WallPaperDisplayActivity"
+            android:exported="false"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
 
     </application>
 

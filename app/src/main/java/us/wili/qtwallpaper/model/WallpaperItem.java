@@ -1,5 +1,6 @@
 package us.wili.qtwallpaper.model;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.avos.avoscloud.AVClassName;
@@ -22,6 +23,15 @@ public class WallpaperItem extends AVObject {
 
     public WallpaperItem() {
 
+    }
+
+    public WallpaperItem(Parcel in){
+        super(in);
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int i) {
+        super.writeToParcel(out, i);
     }
 
     public String imageUrl;

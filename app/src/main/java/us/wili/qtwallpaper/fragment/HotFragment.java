@@ -15,6 +15,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import us.wili.qtwallpaper.R;
@@ -39,7 +40,7 @@ public class HotFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
     private static final int REFRESH_COMPLETE = 1;
 
     private List<CategoryItem> mBanner;
-    private List<WallpaperItem> mItemList;
+    private ArrayList<WallpaperItem> mItemList;
 
     @Nullable
     @Override
@@ -93,7 +94,7 @@ public class HotFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
                 gridQuery.orderByDescending("downloads");
                 gridQuery.limit(36);
                 try {
-                    mItemList = gridQuery.find();
+                    mItemList = (ArrayList<WallpaperItem>) gridQuery.find();
                 } catch (AVException e) {
                     mRefreshHandler.sendEmptyMessage(REFRESH_COMPLETE);
                 }

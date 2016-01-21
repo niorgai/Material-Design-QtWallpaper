@@ -19,7 +19,23 @@ import com.avos.avoscloud.AVObject;
  */
 @AVClassName("Wallpaper")
 public class WallpaperItem extends AVObject {
-    public static final Parcelable.Creator CREATOR = AVObject.AVObjectCreator.instance;
+
+    public static final Parcelable.Creator<WallpaperItem> CREATOR = new Parcelable.ClassLoaderCreator<WallpaperItem>() {
+
+        @Override
+        public WallpaperItem createFromParcel(Parcel source, ClassLoader loader) {
+            return new WallpaperItem(source);
+        }
+
+        public WallpaperItem createFromParcel(Parcel in) {
+            return new WallpaperItem(in);
+        }
+
+        @Override
+        public WallpaperItem[] newArray(int size) {
+            return new WallpaperItem[size];
+        }
+    };
 
     public WallpaperItem() {
 
@@ -27,11 +43,15 @@ public class WallpaperItem extends AVObject {
 
     public WallpaperItem(Parcel in){
         super(in);
+        imageUrl = in.readString();
+        name = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel out, int i) {
         super.writeToParcel(out, i);
+        out.writeString(imageUrl);
+        out.writeString(name);
     }
 
     public String imageUrl;

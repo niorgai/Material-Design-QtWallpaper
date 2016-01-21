@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import us.wili.qtwallpaper.global.MobileConfig;
 import us.wili.qtwallpaper.model.WallpaperItem;
+import us.wili.qtwallpaper.utils.PictureUtils;
 
 /**
  * DisplayActivity的Adapter
@@ -29,7 +30,10 @@ public class DisplayPagerAdapter extends PagerAdapter {
     private ArrayList<WallpaperItem> mItems;
 
     private SimpleDraweeView[] mViews;
+
     private ResizeOptions bannerResizeOption;
+    private ImageRequest fullRequest;
+    private ImageRequest lowRequest;
 
     public DisplayPagerAdapter(Context context, ArrayList<WallpaperItem> items) {
         mContext = context;
@@ -55,13 +59,21 @@ public class DisplayPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View view = mViews[position % 3];
+        if (container.equals(view.getParent())) {
+            container.removeView(view);
+        }
+        container.addView(view);
         SimpleDraweeView draweeViw = (SimpleDraweeView) view;
         WallpaperItem model = mItems.get(position);
-        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(model.imageUrl))
+        fullRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(model.imageUrl))
+                .setResizeOptions(bannerResizeOption)
+                .build();
+        lowRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(model.imageUrl + PictureUtils.COMPRESS_20))
                 .setResizeOptions(bannerResizeOption)
                 .build();
         DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setImageRequest(request)
+                .setLowResImageRequest(lowRequest)
+                .setImageRequest(fullRequest)
                 .setOldController(draweeViw.getController())
                 .build();
         draweeViw.setController(controller);
@@ -70,6 +82,6 @@ public class DisplayPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        super.destroyItem(container, position, object);
+
     }
 }

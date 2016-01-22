@@ -10,6 +10,7 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.AVRelation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import us.wili.qtwallpaper.R;
@@ -81,7 +82,9 @@ public class CategoryDetailActivity extends BaseActivity implements SwipeRefresh
                 @Override
                 protected void onSuccess(List<WallpaperItem> list) {
                     super.onSuccess(list);
-                    mAdapter.update(list);
+                    ArrayList<WallpaperItem> items = new ArrayList<>();
+                    items.addAll(list);
+                    mAdapter.update(items);
                 }
 
                 @Override

@@ -3,6 +3,7 @@ package us.wili.qtwallpaper.adapter;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -21,9 +22,10 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.activity.WallPaperDisplayActivity;
 import us.wili.qtwallpaper.global.MobileConfig;
 import us.wili.qtwallpaper.model.WallpaperItem;
 import us.wili.qtwallpaper.utils.PictureUtils;
@@ -43,7 +45,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
     private Context mContext;
     private ResizeOptions mGridResizeOption;
 
-    private List<WallpaperItem> itemList;
+    private ArrayList<WallpaperItem> itemList;
 
     //for animation
     private int lastAnimatedPosition = -1;
@@ -57,7 +59,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         mGridResizeOption = new ResizeOptions(width, height);
     }
 
-    public void update(List<WallpaperItem> items) {
+    public void update(ArrayList<WallpaperItem> items) {
         itemList = items;
         lastAnimatedPosition = -1;
         isFirstPageLoadFinish = false;
@@ -116,7 +118,7 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         return itemList == null ? 0 : itemList.size();
     }
 
-    class GridViewHolder extends RecyclerView.ViewHolder {
+    class GridViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         SimpleDraweeView mSimpleDraweeView;
 
         public GridViewHolder(View itemView) {
@@ -129,6 +131,13 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
                 draweeHierarchy = new GenericDraweeHierarchyBuilder(mContext.getResources()).build();
             }
             draweeHierarchy.setActualImageScaleType(ScalingUtils.ScaleType.FIT_XY);
+            mSimpleDraweeView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = WallPaperDisplayActivity.getIntent(mContext, itemList, getAdapterPosition());
+            mContext.startActivity(intent);
         }
     }
 }

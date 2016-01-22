@@ -1,12 +1,14 @@
 package us.wili.qtwallpaper.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import us.wili.qtwallpaper.global.MobileConfig;
 import us.wili.qtwallpaper.model.WallpaperItem;
 import us.wili.qtwallpaper.utils.PictureUtils;
+import us.wili.qtwallpaper.widget.DisplayProgressDrawable;
 
 /**
  * DisplayActivity的Adapter
@@ -32,8 +35,6 @@ public class DisplayPagerAdapter extends PagerAdapter {
     private SimpleDraweeView[] mViews;
 
     private ResizeOptions bannerResizeOption;
-    private ImageRequest fullRequest;
-    private ImageRequest lowRequest;
 
     public DisplayPagerAdapter(Context context, ArrayList<WallpaperItem> items) {
         mContext = context;
@@ -41,7 +42,12 @@ public class DisplayPagerAdapter extends PagerAdapter {
         mViews = new SimpleDraweeView[3];
         for (int i = 0; i < mViews.length; i++) {
             mViews[i] = new SimpleDraweeView(context);
-            mViews[i].setHierarchy(GenericDraweeHierarchyBuilder.newInstance(context.getResources()).setFadeDuration(0).build());
+            mViews[i].setHierarchy(GenericDraweeHierarchyBuilder.newInstance(context.getResources())
+                    .setFadeDuration(0)
+                    .setPlaceholderImage(new ColorDrawable(PictureUtils.getRandomColor(context)))
+                    .setActualImageScaleType(ScalingUtils.ScaleType.FIT_XY)
+                    .setProgressBarImage(new DisplayProgressDrawable(context))
+                    .build());
         }
         bannerResizeOption = new ResizeOptions(MobileConfig.screenWidth, MobileConfig.screenHeight);
     }
@@ -65,10 +71,10 @@ public class DisplayPagerAdapter extends PagerAdapter {
         container.addView(view);
         SimpleDraweeView draweeViw = (SimpleDraweeView) view;
         WallpaperItem model = mItems.get(position);
-        fullRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(model.imageUrl))
+        ImageRequest fullRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(model.imageUrl))
                 .setResizeOptions(bannerResizeOption)
                 .build();
-        lowRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(model.imageUrl + PictureUtils.COMPRESS_20))
+        ImageRequest lowRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(model.imageUrl + PictureUtils.COMPRESS_20))
                 .setResizeOptions(bannerResizeOption)
                 .build();
         DraweeController controller = Fresco.newDraweeControllerBuilder()

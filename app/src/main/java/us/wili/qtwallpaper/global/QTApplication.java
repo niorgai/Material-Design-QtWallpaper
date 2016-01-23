@@ -7,7 +7,6 @@ import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
-import com.github.moduth.blockcanary.BlockCanary;
 
 import us.wili.qtwallpaper.model.CategoryItem;
 import us.wili.qtwallpaper.model.WallpaperItem;
@@ -32,7 +31,5 @@ public class QTApplication extends Application {
         AVObject.registerSubclass(CategoryItem.class);
         AVObject.registerSubclass(WallpaperItem.class);
         AVOSCloud.initialize(this, AVUtils.APP_ID, AVUtils.APP_KEY);
-
-        BlockCanary.install(this, new AppBlockCanaryContext()).start();
     }
 }

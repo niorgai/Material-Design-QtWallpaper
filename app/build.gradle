@@ -29,8 +29,5 @@ dependencies {
     compile 'com.facebook.fresco:fresco:0.8.1'
     //avoscloud-sdk 为 LeanCloud基础包
     compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
-    //blockCanary
-    debugCompile 'com.github.moduth:blockcanary:1.0.2'
-    releaseCompile 'com.github.moduth:blockcanary-no-op:1.0.2'
 
 }

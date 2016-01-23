@@ -31,6 +31,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
         <activity android:name=".activity.WallPaperDisplayActivity"
+            android:theme="@style/TranslucentTheme"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 

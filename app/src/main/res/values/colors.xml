@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="commonWhite">#FFFFFF</color>
+    <color name="commonBlack">#000000</color>
     <color name="commonGrey">#818181</color>
 
     <!-- holder-->

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.adapter.DisplayPagerAdapter;
 import us.wili.qtwallpaper.model.WallpaperItem;
+import us.wili.qtwallpaper.widget.SlideFinishLayout;
 
 /**
  * 展示壁纸的Activity
@@ -61,6 +62,13 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
     protected void initViews() {
         setContentView(R.layout.activity_wall_paper_display);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        SlideFinishLayout finishLayout = (SlideFinishLayout) findViewById(R.id.finish_layout);
+        finishLayout.setOnFinishListener(new SlideFinishLayout.onSlideFinishListener() {
+            @Override
+            public void onSlideFinish() {
+                WallPaperDisplayActivity.this.finish();
+            }
+        });
     }
 
     protected void initData() {

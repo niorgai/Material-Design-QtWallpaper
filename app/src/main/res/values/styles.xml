@@ -13,4 +13,8 @@
 
     </style>
 
+    <style name="TranslucentTheme" parent="BaseAppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
 </resources>

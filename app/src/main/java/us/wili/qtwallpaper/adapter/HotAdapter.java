@@ -283,8 +283,11 @@ public class HotAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            Intent intent = WallPaperDisplayActivity.getIntent(mContext, mWallPaper, getAdapterPosition());
-            mContext.startActivity(intent);
+            if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                int pos = isHaveBannerItem() ? getAdapterPosition() - 1 : getAdapterPosition();
+                Intent intent = WallPaperDisplayActivity.getIntent(mContext, mWallPaper, pos);
+                mContext.startActivity(intent);
+            }
         }
     }
 }

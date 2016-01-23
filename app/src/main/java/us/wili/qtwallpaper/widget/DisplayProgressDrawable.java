@@ -42,7 +42,7 @@ public class DisplayProgressDrawable extends ProgressBarDrawable {
             return;
         }
         drawBar(canvas, maxLevel, backgroundColor);
-        drawBar(canvas, mLevel, getColor());
+        drawBar(canvas, mLevel, progressColor);
     }
 
     private void drawBar(Canvas canvas, int level, int color) {

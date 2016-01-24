@@ -80,7 +80,7 @@ public class SlideFinishLayout extends FrameLayout {
             window = ((Activity) context).getWindow();
             //初始化时以40%的黑色透明作为Activity背景色
             backDrawable = new ColorDrawable(getResources().getColor(R.color.commonBlack));
-            backDrawable.setAlpha((int) (255 * 0.6));
+            backDrawable.setAlpha((int) (255 * 0.4));
             window.setBackgroundDrawable(backDrawable);
         }
     }
@@ -141,7 +141,7 @@ public class SlideFinishLayout extends FrameLayout {
                     mParentView.scrollBy(0, mTempY - moveY);
                     //计算百分比设置40% - 100%的透明
                     if (window != null) {
-                        int pre = (int) (((float)moveY / mViewHeight) * 255);
+                        int pre = (int) (((float)moveY / mViewHeight) * 153 + 102f);
                         backDrawable.setAlpha(255 - pre);
                         window.setBackgroundDrawable(backDrawable);
                     }
@@ -187,7 +187,7 @@ public class SlideFinishLayout extends FrameLayout {
     private void scrollToBottom() {
         backDrawable.setAlpha(0);
         window.setBackgroundDrawable(backDrawable);
-        final int delta = mViewHeight + mParentView.getScrollY();
+        final int delta = mViewHeight + mParentView.getScrollY() - mStatusBarHeight - mNavBarHeight;
         mScroller.startScroll(0, mParentView.getScrollY(), 0, -delta + 1, Math.abs(delta));
         postInvalidate();
     }

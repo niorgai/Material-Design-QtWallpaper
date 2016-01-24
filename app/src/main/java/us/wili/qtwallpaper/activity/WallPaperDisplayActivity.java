@@ -83,4 +83,10 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
     protected void onDelayLoad() {
 
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, 0);
+    }
 }

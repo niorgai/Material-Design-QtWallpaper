@@ -13,4 +13,6 @@
     <string name="support_qt_wall_paper">支持晴天壁纸</string>
     <string name="about_qt_wall_paper">关于晴天壁纸</string>
     <string name="logout">注销</string>
+
+    <string name="clear_cache_success">清除缓存成功</string>
 </resources>

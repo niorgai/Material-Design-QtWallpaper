@@ -1,6 +1,7 @@
 package us.wili.qtwallpaper.global;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.avos.avoscloud.AVOSCloud;
@@ -17,11 +18,13 @@ import us.wili.qtwallpaper.utils.AVUtils;
  * Created by qiu on 12/30/15.
  */
 public class QTApplication extends Application {
+
+    private static Context mContext;
     
     @Override
     public void onCreate() {
         super.onCreate();
-
+        mContext = this;
         ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
                 .setDownsampleEnabled(true)
                 .setBitmapsConfig(Bitmap.Config.RGB_565)
@@ -31,5 +34,9 @@ public class QTApplication extends Application {
         AVObject.registerSubclass(CategoryItem.class);
         AVObject.registerSubclass(WallpaperItem.class);
         AVOSCloud.initialize(this, AVUtils.APP_ID, AVUtils.APP_KEY);
+    }
+
+    public static Context getMyApplicationContext() {
+        return mContext;
     }
 }

@@ -14,23 +14,35 @@
     </group>
 
     <group android:id="@+id/group_personal" android:checkableBehavior="none">
-        <item android:icon="@drawable/menu_star"
+        <item
+            android:id="@+id/my_star"
+            android:icon="@drawable/menu_star"
             android:checkable="false"
             android:title="@string/my_star"/>
 
-        <item android:icon="@drawable/menu_trash"
+        <item
+            android:id="@+id/clear_cache"
+            android:icon="@drawable/menu_trash"
             android:title="@string/clear_trash"/>
 
-        <item android:icon="@drawable/menu_feedback"
+        <item
+            android:id="@+id/send_feed_back"
+            android:icon="@drawable/menu_feedback"
             android:title="@string/feedback"/>
 
-        <item android:icon="@drawable/menu_support"
+        <item
+            android:id="@+id/support"
+            android:icon="@drawable/menu_support"
             android:title="@string/support_qt_wall_paper"/>
 
-        <item android:icon="@drawable/menu_about"
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/menu_about"
             android:title="@string/about_qt_wall_paper"/>
     </group>
 
-    <item android:title="@string/logout"/>
+    <item
+        android:id="@+id/log_out"
+        android:title="@string/logout"/>
 
 </menu>

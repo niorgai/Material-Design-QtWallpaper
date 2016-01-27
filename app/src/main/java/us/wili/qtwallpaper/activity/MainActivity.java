@@ -13,10 +13,13 @@ import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.view.MenuItem;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.fragment.CategoryFragment;
 import us.wili.qtwallpaper.fragment.HotFragment;
 import us.wili.qtwallpaper.global.MobileConfig;
+import us.wili.qtwallpaper.utils.ToastUtil;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final int PAGE_HOT = 0;
@@ -122,6 +125,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.category:
                 changeTab(PAGE_CATEGORY);
+                return true;
+            case R.id.clear_cache:
+                Fresco.getImagePipeline().clearCaches();
+                ToastUtil.getInstance().showToast(R.string.clear_cache_success);
+                return true;
+            //TODO::
+            case R.id.send_feed_back:
+                return true;
+            case R.id.support:
+                return true;
+            case R.id.about:
                 return true;
             default:
                 break;

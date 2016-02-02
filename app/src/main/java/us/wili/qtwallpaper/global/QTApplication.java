@@ -8,10 +8,12 @@ import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.umeng.socialize.PlatformConfig;
 
 import us.wili.qtwallpaper.model.CategoryItem;
 import us.wili.qtwallpaper.model.WallpaperItem;
 import us.wili.qtwallpaper.utils.AVUtils;
+import us.wili.qtwallpaper.utils.WxUtils;
 
 /**
  * Base Application
@@ -31,9 +33,13 @@ public class QTApplication extends Application {
                 .build();
         Fresco.initialize(this, config);
 
+//        Lean cloud
         AVObject.registerSubclass(CategoryItem.class);
         AVObject.registerSubclass(WallpaperItem.class);
         AVOSCloud.initialize(this, AVUtils.APP_ID, AVUtils.APP_KEY);
+
+//        Umeng
+        PlatformConfig.setWeixin(WxUtils.APP_ID, WxUtils.APP_SECRET);
     }
 
     public static Context getMyApplicationContext() {

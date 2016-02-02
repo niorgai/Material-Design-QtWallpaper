@@ -18,4 +18,8 @@
     <color name="holder6">#E7F1FE</color>
     <color name="holder7">#F7F3CE</color>
     <color name="holder8">#A191AE</color>
+
+    <!-- About-->
+    <color name="aboutStart">#ECF5F4</color>
+    <color name="aboutEnd">#FDF3D2</color>
 </resources>

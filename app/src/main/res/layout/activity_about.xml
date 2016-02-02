@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.drawee.view.SimpleDraweeView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    fresco:placeholderImage="@drawable/about_us"
+    fresco:placeholderImageScaleType="center"
+    fresco:backgroundImage="@drawable/bg_about"
+    android:layout_height="match_parent">
+
+</com.facebook.drawee.view.SimpleDraweeView>

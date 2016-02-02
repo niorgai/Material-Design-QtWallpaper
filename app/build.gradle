@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "us.wili.qtwallpaper"
         minSdkVersion 14
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 23
+        versionCode 120
+        versionName "1.2.0"
     }
     buildTypes {
         release {

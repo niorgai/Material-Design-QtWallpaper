@@ -21,6 +21,7 @@ import us.wili.qtwallpaper.fragment.CategoryFragment;
 import us.wili.qtwallpaper.fragment.HotFragment;
 import us.wili.qtwallpaper.global.MobileConfig;
 import us.wili.qtwallpaper.utils.ToastUtil;
+import us.wili.qtwallpaper.utils.WxUtils;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final int PAGE_HOT = 0;
@@ -138,6 +139,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.support:
                 return true;
             case R.id.about:
+                startActivity(new Intent(this, About.class));
+                return true;
+            case R.id.login:
+                WxUtils.loginIn(this);
                 return true;
             default:
                 break;

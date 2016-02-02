@@ -10,7 +10,11 @@
     </style>
 
     <style name="AppTheme" parent="BaseAppTheme">
+        <item name="android:windowBackground">@color/commonBackground</item>
+    </style>
 
+    <style name="EmptyBgTheme" parent="BaseAppTheme">
+        <item name="android:windowBackground">@color/commonWhite</item>
     </style>
 
     <style name="TranslucentTheme" parent="BaseAppTheme">

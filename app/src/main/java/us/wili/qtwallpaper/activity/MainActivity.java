@@ -1,5 +1,6 @@
 package us.wili.qtwallpaper.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -130,9 +131,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Fresco.getImagePipeline().clearCaches();
                 ToastUtil.getInstance().showToast(R.string.clear_cache_success);
                 return true;
-            //TODO::
             case R.id.send_feed_back:
+                startActivity(new Intent(this, FeedBackActivity.class));
                 return true;
+            //TODO::
             case R.id.support:
                 return true;
             case R.id.about:

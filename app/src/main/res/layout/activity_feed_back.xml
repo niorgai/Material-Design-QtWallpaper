@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:textColor="@color/commonBlack"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="@dimen/item_content_padding"
+        android:layout_marginStart="@dimen/item_content_padding"
+        android:textSize="14sp"
+        android:text="@string/feed_back_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/feed_back_content"
+        android:layout_marginTop="5dp"
+        android:paddingRight="@dimen/item_content_padding"
+        android:paddingLeft="@dimen/item_content_padding"
+        android:paddingEnd="@dimen/item_content_padding"
+        android:paddingStart="@dimen/item_content_padding"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:maxLines="15"
+        android:scrollbars="vertical"
+        android:textColor="@color/commonGrey"
+        android:textSize="14sp"
+        android:hint="@string/feed_back_content_hint"
+        android:gravity="top"
+        android:background="@color/commonWhite"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" />
+
+    <TextView
+        android:textColor="@color/commonBlack"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="@dimen/item_content_padding"
+        android:layout_marginStart="@dimen/item_content_padding"
+        android:textSize="14sp"
+        android:text="@string/contact_choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/feed_back_contact"
+        android:layout_marginTop="5dp"
+        android:paddingRight="@dimen/item_content_padding"
+        android:paddingLeft="@dimen/item_content_padding"
+        android:paddingEnd="@dimen/item_content_padding"
+        android:paddingStart="@dimen/item_content_padding"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:maxLines="1"
+        android:scrollbars="vertical"
+        android:textColor="@color/commonGrey"
+        android:textSize="14sp"
+        android:hint="@string/contact_choice_hint"
+        android:gravity="top"
+        android:background="@color/commonWhite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

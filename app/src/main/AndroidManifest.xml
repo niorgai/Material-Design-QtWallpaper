@@ -18,10 +18,12 @@
         android:name=".global.QTApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity"
+            android:exported="true"
+            android:theme="@style/EmptyBgTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -32,6 +34,10 @@
 
         <activity android:name=".activity.WallPaperDisplayActivity"
             android:theme="@style/TranslucentTheme"
+            android:exported="false"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
+        <activity android:name=".activity.FeedBackActivity"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 

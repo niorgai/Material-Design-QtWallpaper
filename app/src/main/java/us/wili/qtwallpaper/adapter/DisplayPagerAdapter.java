@@ -29,7 +29,6 @@ import us.wili.qtwallpaper.widget.DisplayProgressDrawable;
  */
 public class DisplayPagerAdapter extends PagerAdapter {
 
-    private Context mContext;
     private ArrayList<WallpaperItem> mItems;
 
     private SimpleDraweeView[] mViews;
@@ -37,7 +36,6 @@ public class DisplayPagerAdapter extends PagerAdapter {
     private ResizeOptions bannerResizeOption;
 
     public DisplayPagerAdapter(Context context, ArrayList<WallpaperItem> items) {
-        mContext = context;
         mItems = items;
         mViews = new SimpleDraweeView[3];
         for (int i = 0; i < mViews.length; i++) {
@@ -69,7 +67,7 @@ public class DisplayPagerAdapter extends PagerAdapter {
             container.removeView(view);
         }
         container.addView(view);
-        SimpleDraweeView draweeViw = (SimpleDraweeView) view;
+        SimpleDraweeView draweeView = (SimpleDraweeView) view;
         WallpaperItem model = mItems.get(position);
         ImageRequest fullRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(model.imageUrl))
                 .setResizeOptions(bannerResizeOption)
@@ -80,9 +78,9 @@ public class DisplayPagerAdapter extends PagerAdapter {
         DraweeController controller = Fresco.newDraweeControllerBuilder()
                 .setLowResImageRequest(lowRequest)
                 .setImageRequest(fullRequest)
-                .setOldController(draweeViw.getController())
+                .setOldController(draweeView.getController())
                 .build();
-        draweeViw.setController(controller);
+        draweeView.setController(controller);
         return view;
     }
 

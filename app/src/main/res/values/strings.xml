@@ -29,6 +29,7 @@
     <string name="wx_not_install">请先安装微信</string>
     <string name="wx_login_success">微信登录成功</string>
     <string name="wx_login_fail">微信登录失败</string>
+    <string name="wx_log_out_success">注销成功</string>
     
     <!-- About-->
     <string name="about_qt_wall_paper">关于晴天壁纸</string>

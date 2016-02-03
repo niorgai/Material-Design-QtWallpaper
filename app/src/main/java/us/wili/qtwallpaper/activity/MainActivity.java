@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.view.MenuItem;
 
+import com.avos.avoscloud.AVUser;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
 import us.wili.qtwallpaper.R;
@@ -24,14 +25,16 @@ import us.wili.qtwallpaper.utils.ToastUtil;
 import us.wili.qtwallpaper.utils.WxUtils;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     public static final int PAGE_HOT = 0;
     public static final int PAGE_CATEGORY = 1;
+
     private SparseArray<Fragment> mFragments;
 
     private DrawerLayout mDrawerLayout;
+    private NavigationView mNavigationView;
 
     private int mContainer;
-
     private int currentTab = -1;
 
     @Override
@@ -61,10 +64,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setItemIconTintList(null);
-        navigationView.setNavigationItemSelectedListener(this);
-
+        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        mNavigationView.setItemIconTintList(null);
+        mNavigationView.setNavigationItemSelectedListener(this);
         mContainer = R.id.container;
 
         mFragments = new SparseArray<>();
@@ -78,6 +80,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ft.add(mContainer, mFragments.get(PAGE_HOT));
         ft.commit();
         currentTab = PAGE_HOT;
+
+        AVUser user = AVUser.getCurrentUser();
+        if (user == null) {
+            mNavigationView.inflateMenu(R.menu.nav_menu_login);
+        } else {
+            mNavigationView.inflateMenu(R.menu.navi_menu_logout);
+        }
     }
 
     /**
@@ -143,6 +152,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.log_in:
                 WxUtils.loginIn(this);
+                return true;
+            case R.id.log_out:
+                WxUtils.logOut(this);
                 return true;
             default:
                 break;

@@ -1,7 +1,12 @@
 package us.wili.qtwallpaper.utils;
 
 import android.app.Activity;
+import android.text.TextUtils;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.LogInCallback;
+import com.avos.avoscloud.SaveCallback;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -31,24 +36,60 @@ public class WxUtils {
         shareAPI.doOauthVerify(activity, SHARE_MEDIA.WEIXIN, new UMAuthListener() {
             @Override
             public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-//                openid assess_token expires_in
-                shareAPI.getPlatformInfo(activity, SHARE_MEDIA.WEIXIN, new UMAuthListener() {
+                //openid, access_token, expires_in
+                AVUser.AVThirdPartyUserAuth userAuth = new AVUser.AVThirdPartyUserAuth(map.get("access_token"),
+                        map.get("expires_in"), AVUser.AVThirdPartyUserAuth.SNS_TENCENT_WEIXIN, map.get("openid"));
+                AVUser.loginWithAuthData(userAuth, new LogInCallback<AVUser>() {
                     @Override
-                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> infoMap) {
-                        ToastUtil.getInstance().showToast(R.string.wx_login_success);
-//                        nickname, sex, headimgurl,
-                    }
+                    public void done(AVUser avUser, AVException e) {
+                        if (e == null) {
+                            shareAPI.getPlatformInfo(activity, SHARE_MEDIA.WEIXIN, new UMAuthListener() {
+                                @Override
+                                public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> infoMap) {
+                                    AVUser user = AVUser.getCurrentUser();
+                                    if (user != null) {
+                                        if (!TextUtils.isEmpty(infoMap.get("nickname"))) {
+                                            user.put("nickname", infoMap.get("nickname"));
+                                        }
+                                        String sex = infoMap.get("sex");
+                                        if (!TextUtils.isEmpty(sex)) {
+                                            //在不为null的情况下,0为微信返回的男性
+                                            user.put("sex", sex.equals("0") ? 1 : 2);
+                                        } else {
+                                            user.put("sex", "0");
+                                        }
+                                        if (!TextUtils.isEmpty(infoMap.get("headimgurl"))) {
+                                            user.put("avatorUrl", infoMap.get("headimgurl"));
+                                        }
+                                        user.saveInBackground(new SaveCallback() {
+                                            @Override
+                                            public void done(AVException e) {
+                                                if (e == null) {
+                                                    ToastUtil.getInstance().showToast(R.string.wx_login_success);
+                                                } else {
+                                                    ToastUtil.getInstance().showToast(R.string.wx_login_fail);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
 
-                    @Override
-                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-                        ToastUtil.getInstance().showToast(R.string.wx_login_fail);
-                    }
+                                @Override
+                                public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+                                    ToastUtil.getInstance().showToast(R.string.wx_login_fail);
+                                }
 
-                    @Override
-                    public void onCancel(SHARE_MEDIA share_media, int i) {
+                                @Override
+                                public void onCancel(SHARE_MEDIA share_media, int i) {
 
+                                }
+                            });
+                        } else {
+                            ToastUtil.getInstance().showToast(R.string.wx_login_fail);
+                        }
                     }
                 });
+
             }
 
             @Override
@@ -61,6 +102,14 @@ public class WxUtils {
 
             }
         });
+    }
+
+    //退出登录
+    public static void logOut(Activity activity) {
+        UMShareAPI shareAPI = UMShareAPI.get(activity);
+        shareAPI.deleteOauth(activity, SHARE_MEDIA.WEIXIN, null);
+        AVUser.logOut();
+        ToastUtil.getInstance().showToast(R.string.wx_log_out_success);
     }
 
 }

@@ -27,6 +27,7 @@
 
     <!-- Wx-->
     <string name="wx_not_install">请先安装微信</string>
+    <string name="wx_authing">微信授权中…</string>
     <string name="wx_login_success">微信登录成功</string>
     <string name="wx_login_fail">微信登录失败</string>
     <string name="wx_log_out_success">注销成功</string>

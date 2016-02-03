@@ -1,6 +1,8 @@
 package us.wili.qtwallpaper.utils;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.avos.avoscloud.AVException;
@@ -14,6 +16,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import java.util.Map;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.connect.BroadcastValue;
 
 /**
  * 微信工具类
@@ -66,6 +69,11 @@ public class WxUtils {
                                             public void done(AVException e) {
                                                 if (e == null) {
                                                     ToastUtil.getInstance().showToast(R.string.wx_login_success);
+                                                    //发送广播
+                                                    LocalBroadcastManager manager = LocalBroadcastManager.getInstance(activity);
+                                                    Intent intent = new Intent();
+                                                    intent.setAction(BroadcastValue.LOGIN);
+                                                    manager.sendBroadcast(intent);
                                                 } else {
                                                     ToastUtil.getInstance().showToast(R.string.wx_login_fail);
                                                 }
@@ -110,6 +118,11 @@ public class WxUtils {
         shareAPI.deleteOauth(activity, SHARE_MEDIA.WEIXIN, null);
         AVUser.logOut();
         ToastUtil.getInstance().showToast(R.string.wx_log_out_success);
+        //发送广播
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(activity);
+        Intent intent = new Intent();
+        intent.setAction(BroadcastValue.LOGOUT);
+        manager.sendBroadcast(intent);
     }
 
 }

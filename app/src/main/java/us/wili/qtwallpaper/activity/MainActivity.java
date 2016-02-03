@@ -1,10 +1,15 @@
 package us.wili.qtwallpaper.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -13,11 +18,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.avos.avoscloud.AVUser;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.connect.BroadcastValue;
+import us.wili.qtwallpaper.dialog.LoadingDialog;
 import us.wili.qtwallpaper.fragment.CategoryFragment;
 import us.wili.qtwallpaper.fragment.HotFragment;
 import us.wili.qtwallpaper.global.MobileConfig;
@@ -33,9 +43,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private SimpleDraweeView mAvatar;
+    private TextView mUserName;
 
     private int mContainer;
     private int currentTab = -1;
+
+    private LoadingDialog mLoadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +81,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         mNavigationView.setItemIconTintList(null);
         mNavigationView.setNavigationItemSelectedListener(this);
+        View header = mNavigationView.getHeaderView(0);
+        if (header != null) {
+            mAvatar = (SimpleDraweeView) header.findViewById(R.id.user_avatar);
+            mUserName = (TextView) header.findViewById(R.id.user_name);
+        }
         mContainer = R.id.container;
 
         mFragments = new SparseArray<>();
         mFragments.put(PAGE_HOT, new HotFragment());
         mFragments.put(PAGE_CATEGORY, new CategoryFragment());
+
+        mLoadingDialog = new LoadingDialog(this);
     }
 
     private void initData() {
@@ -83,9 +104,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         AVUser user = AVUser.getCurrentUser();
         if (user == null) {
-            mNavigationView.inflateMenu(R.menu.nav_menu_login);
+            logOutSuccess();
         } else {
-            mNavigationView.inflateMenu(R.menu.navi_menu_logout);
+            logInSuccess();
+        }
+
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
+        manager.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                logInSuccess();
+            }
+        }, new IntentFilter(BroadcastValue.LOGIN));
+        manager.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                logOutSuccess();
+            }
+        }, new IntentFilter(BroadcastValue.LOGOUT));
+    }
+
+    private void logInSuccess() {
+        if (mNavigationView.getMenu() != null) {
+            mNavigationView.getMenu().clear();
+        }
+        mNavigationView.inflateMenu(R.menu.navi_menu_logout);
+        AVUser user = AVUser.getCurrentUser();
+        if (user.get("avatorUrl") != null && user.get("avatorUrl") instanceof String) {
+            mAvatar.setImageURI(Uri.parse((String) user.get("avatorUrl")));
+        }
+        if (user.get("nickname") != null && user.get("nickname") instanceof CharSequence) {
+            mUserName.setText((CharSequence) user.get("nickname"));
+        }
+    }
+
+    private void logOutSuccess() {
+        if (mNavigationView.getMenu() != null) {
+            mNavigationView.getMenu().clear();
+        }
+        mNavigationView.inflateMenu(R.menu.nav_menu_login);
+        mAvatar.setImageURI(Uri.EMPTY);
+        mUserName.setText("");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mLoadingDialog.isShowing()) {
+            mLoadingDialog.dismiss();
         }
     }
 
@@ -151,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, About.class));
                 return true;
             case R.id.log_in:
+                mLoadingDialog.show();
                 WxUtils.loginIn(this);
                 return true;
             case R.id.log_out:

@@ -22,4 +22,7 @@
     <!-- About-->
     <color name="aboutStart">#ECF5F4</color>
     <color name="aboutEnd">#FDF3D2</color>
+
+    <!-- dialog-->
+    <color name="loadingBackground">#00000000</color>
 </resources>

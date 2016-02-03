@@ -27,6 +27,8 @@ import us.wili.qtwallpaper.model.ViewPagerModel;
  */
 public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClickListener {
 
+    public static final int MAX_COUNT = 20000;
+
     private Context mContext;
     private List<ViewPagerModel> data;
 
@@ -58,7 +60,7 @@ public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClick
 
     @Override
     public int getCount() {
-        return data.size() > 1 ? Integer.MAX_VALUE : data.size();
+        return data.size() > 1 ? MAX_COUNT : data.size();
     }
 
     @Override

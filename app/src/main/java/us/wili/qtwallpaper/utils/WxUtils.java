@@ -19,11 +19,11 @@ public class WxUtils {
     public static final String APP_ID = "wxf9add774442056f5";
     public static final String APP_SECRET = "278664f453ed3a673324c568313f8a57";
 
-    public static void loginIn(Activity activity) {
+    public static void loginIn(final Activity activity) {
         if (activity == null || activity.isFinishing()) {
             return;
         }
-        UMShareAPI shareAPI = UMShareAPI.get(activity);
+        final UMShareAPI shareAPI = UMShareAPI.get(activity);
         if (!shareAPI.isInstall(activity, SHARE_MEDIA.WEIXIN)) {
             ToastUtil.getInstance().showToast(R.string.wx_not_install);
             return;
@@ -31,7 +31,24 @@ public class WxUtils {
         shareAPI.doOauthVerify(activity, SHARE_MEDIA.WEIXIN, new UMAuthListener() {
             @Override
             public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                ToastUtil.getInstance().showToast(R.string.wx_login_success);
+//                openid assess_token expires_in
+                shareAPI.getPlatformInfo(activity, SHARE_MEDIA.WEIXIN, new UMAuthListener() {
+                    @Override
+                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> infoMap) {
+                        ToastUtil.getInstance().showToast(R.string.wx_login_success);
+//                        nickname, sex, headimgurl,
+                    }
+
+                    @Override
+                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+                        ToastUtil.getInstance().showToast(R.string.wx_login_fail);
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA share_media, int i) {
+
+                    }
+                });
             }
 
             @Override

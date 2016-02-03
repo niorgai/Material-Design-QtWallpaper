@@ -20,6 +20,9 @@ import com.avos.avoscloud.AVObject;
 @AVClassName("Wallpaper")
 public class WallpaperItem extends AVObject {
 
+    public static final String DOWNLOADS = "downloads";
+    public static final String CATEGORY_ID = "categoryId";
+
     public static final Parcelable.Creator<WallpaperItem> CREATOR = new Parcelable.ClassLoaderCreator<WallpaperItem>() {
 
         @Override

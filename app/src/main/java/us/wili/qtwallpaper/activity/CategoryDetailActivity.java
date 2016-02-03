@@ -76,8 +76,8 @@ public class CategoryDetailActivity extends BaseActivity implements SwipeRefresh
     public void onRefresh() {
         try {
             CategoryItem item = CategoryItem.createWithoutData(CategoryItem.class, categoryId);
-            AVQuery<WallpaperItem> bannerQuery = AVRelation.reverseQuery(WallpaperItem.class, "categoryId", item);
-            bannerQuery.orderByDescending("downloads");
+            AVQuery<WallpaperItem> bannerQuery = AVRelation.reverseQuery(WallpaperItem.class, WallpaperItem.CATEGORY_ID, item);
+            bannerQuery.orderByDescending(WallpaperItem.DOWNLOADS);
             bannerQuery.findInBackground(new AVCallback<WallpaperItem>() {
                 @Override
                 protected void onSuccess(List<WallpaperItem> list) {

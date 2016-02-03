@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.about:
                 startActivity(new Intent(this, About.class));
                 return true;
-            case R.id.login:
+            case R.id.log_in:
                 WxUtils.loginIn(this);
                 return true;
             default:

@@ -122,6 +122,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 logOutSuccess();
             }
         }, new IntentFilter(BroadcastValue.LOGOUT));
+        manager.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (mLoadingDialog.isShowing()) {
+                    mLoadingDialog.dismiss();
+                }
+            }
+        }, new IntentFilter(BroadcastValue.LOGIN_COMPLETE));
     }
 
     private void logInSuccess() {
@@ -145,14 +153,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView.inflateMenu(R.menu.nav_menu_login);
         mAvatar.setImageURI(Uri.EMPTY);
         mUserName.setText("");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mLoadingDialog.isShowing()) {
-            mLoadingDialog.dismiss();
-        }
     }
 
     /**

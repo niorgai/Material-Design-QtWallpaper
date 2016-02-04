@@ -9,4 +9,6 @@ public interface BroadcastValue {
     String LOGIN = "login";
 
     String LOGOUT = "logout";
+
+    String LOGIN_COMPLETE = "login_complete";
 }

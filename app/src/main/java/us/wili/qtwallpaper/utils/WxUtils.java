@@ -28,12 +28,17 @@ public class WxUtils {
     public static final String APP_SECRET = "278664f453ed3a673324c568313f8a57";
 
     public static void loginIn(final Activity activity) {
+        final LocalBroadcastManager manager = LocalBroadcastManager.getInstance(activity);
+        final Intent completeIntent = new Intent();
+        completeIntent.setAction(BroadcastValue.LOGIN_COMPLETE);
         if (activity == null || activity.isFinishing()) {
+            manager.sendBroadcast(completeIntent);
             return;
         }
         final UMShareAPI shareAPI = UMShareAPI.get(activity);
         if (!shareAPI.isInstall(activity, SHARE_MEDIA.WEIXIN)) {
             ToastUtil.getInstance().showToast(R.string.wx_not_install);
+            manager.sendBroadcast(completeIntent);
             return;
         }
         shareAPI.doOauthVerify(activity, SHARE_MEDIA.WEIXIN, new UMAuthListener() {
@@ -67,6 +72,7 @@ public class WxUtils {
                                         user.saveInBackground(new SaveCallback() {
                                             @Override
                                             public void done(AVException e) {
+                                                manager.sendBroadcast(completeIntent);
                                                 if (e == null) {
                                                     ToastUtil.getInstance().showToast(R.string.wx_login_success);
                                                     //发送广播
@@ -85,15 +91,17 @@ public class WxUtils {
                                 @Override
                                 public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
                                     ToastUtil.getInstance().showToast(R.string.wx_login_fail);
+                                    manager.sendBroadcast(completeIntent);
                                 }
 
                                 @Override
                                 public void onCancel(SHARE_MEDIA share_media, int i) {
-
+                                    manager.sendBroadcast(completeIntent);
                                 }
                             });
                         } else {
                             ToastUtil.getInstance().showToast(R.string.wx_login_fail);
+                            manager.sendBroadcast(completeIntent);
                         }
                     }
                 });
@@ -103,11 +111,12 @@ public class WxUtils {
             @Override
             public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
                 ToastUtil.getInstance().showToast(R.string.wx_login_fail);
+                manager.sendBroadcast(completeIntent);
             }
 
             @Override
             public void onCancel(SHARE_MEDIA share_media, int i) {
-
+                manager.sendBroadcast(completeIntent);
             }
         });
     }

@@ -76,7 +76,6 @@ public class WxUtils {
                                                 if (e == null) {
                                                     ToastUtil.getInstance().showToast(R.string.wx_login_success);
                                                     //发送广播
-                                                    LocalBroadcastManager manager = LocalBroadcastManager.getInstance(activity);
                                                     Intent intent = new Intent();
                                                     intent.setAction(BroadcastValue.LOGIN);
                                                     manager.sendBroadcast(intent);

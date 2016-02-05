@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:padding="16dp"
+    android:padding="24dp"
     android:background="?attr/colorPrimaryDark"
     android:fitsSystemWindows="true"
     android:layout_height="192dp">
@@ -17,16 +17,15 @@
         fresco:roundingBorderColor="@color/commonWhite"
         fresco:roundAsCircle="true"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="16dp"
-        android:layout_width="80dp"
-        android:layout_height="80dp" />
+        android:layout_width="96dp"
+        android:layout_height="96dp" />
 
     <TextView
         android:id="@+id/user_name"
         tools:text="userName"
         android:textSize="16sp"
-        android:layout_alignParentBottom="true"
         android:layout_marginBottom="16dp"
+        android:layout_alignParentBottom="true"
         android:textColor="@color/commonWhite"
         android:gravity="center"
         android:layout_width="wrap_content"

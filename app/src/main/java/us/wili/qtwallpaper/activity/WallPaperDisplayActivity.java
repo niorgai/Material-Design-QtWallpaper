@@ -7,19 +7,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.adapter.DisplayPagerAdapter;
 import us.wili.qtwallpaper.model.WallpaperItem;
+import us.wili.qtwallpaper.widget.PictureOperationView;
 import us.wili.qtwallpaper.widget.SlideFinishLayout;
 
 /**
  * 展示壁纸的Activity
  * Created by qiu on 1/19/16.
  */
-public class WallPaperDisplayActivity extends AppCompatActivity {
+public class WallPaperDisplayActivity extends AppCompatActivity implements DisplayPagerAdapter.onWallPaperClickListener {
 
     public static final String WALLPAPERS = "wallpapers";
     public static final String INDEX = "index";
@@ -35,10 +37,13 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
+    private PictureOperationView operationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         initViews();
 
@@ -69,6 +74,8 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
                 WallPaperDisplayActivity.this.finish();
             }
         });
+
+        operationView = (PictureOperationView) findViewById(R.id.operation_view);
     }
 
     protected void initData() {
@@ -76,6 +83,7 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
         int index = intent.getIntExtra(INDEX, 0);
         ArrayList<WallpaperItem> items = intent.getParcelableArrayListExtra(WALLPAPERS);
         DisplayPagerAdapter mAdapter = new DisplayPagerAdapter(this, items);
+        mAdapter.setOnWallPaperClickListener(this);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(index);
     }
@@ -88,5 +96,14 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void onClick(WallpaperItem item) {
+        if (!operationView.isShowing()) {
+            operationView.show();
+        } else {
+            operationView.dismiss();
+        }
     }
 }

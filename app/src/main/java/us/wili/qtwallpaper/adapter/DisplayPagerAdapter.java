@@ -27,13 +27,19 @@ import us.wili.qtwallpaper.widget.DisplayProgressDrawable;
  * DisplayActivity的Adapter
  * Created by qiu on 1/21/16.
  */
-public class DisplayPagerAdapter extends PagerAdapter {
+public class DisplayPagerAdapter extends PagerAdapter implements View.OnClickListener {
 
     private ArrayList<WallpaperItem> mItems;
 
     private SimpleDraweeView[] mViews;
 
     private ResizeOptions bannerResizeOption;
+
+    public interface onWallPaperClickListener {
+        void onClick(WallpaperItem item);
+    }
+
+    private onWallPaperClickListener clickListener;
 
     public DisplayPagerAdapter(Context context, ArrayList<WallpaperItem> items) {
         mItems = items;
@@ -46,8 +52,13 @@ public class DisplayPagerAdapter extends PagerAdapter {
                     .setActualImageScaleType(ScalingUtils.ScaleType.FIT_XY)
                     .setProgressBarImage(new DisplayProgressDrawable(context))
                     .build());
+            mViews[i].setOnClickListener(this);
         }
         bannerResizeOption = new ResizeOptions(MobileConfig.screenWidth, MobileConfig.screenHeight);
+    }
+
+    public void setOnWallPaperClickListener(onWallPaperClickListener clickListener) {
+        this.clickListener = clickListener;
     }
 
     @Override
@@ -81,11 +92,19 @@ public class DisplayPagerAdapter extends PagerAdapter {
                 .setOldController(draweeView.getController())
                 .build();
         draweeView.setController(controller);
+        draweeView.setTag(model);
         return view;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (clickListener != null && v.getTag() != null && v.getTag() instanceof WallpaperItem) {
+            clickListener.onClick((WallpaperItem) v.getTag());
+        }
     }
 }

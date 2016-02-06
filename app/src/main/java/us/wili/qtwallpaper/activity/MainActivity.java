@@ -22,15 +22,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVUser;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.connect.BroadcastValue;
 import us.wili.qtwallpaper.dialog.LoadingDialog;
-import us.wili.qtwallpaper.dialog.OperationDialog;
 import us.wili.qtwallpaper.fragment.CategoryFragment;
 import us.wili.qtwallpaper.fragment.HotFragment;
 import us.wili.qtwallpaper.global.MobileConfig;
+import us.wili.qtwallpaper.utils.ToastUtil;
+import us.wili.qtwallpaper.utils.WxUtils;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -190,41 +192,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        new OperationDialog(this, findViewById(mContainer)).show();
-//        if (item.getGroupId() == R.id.group_tab) {
-//            item.setChecked(true);
-//        }
-//        mDrawerLayout.closeDrawer(GravityCompat.START);
-//        switch (item.getItemId()) {
-//            case R.id.hot:
-//                changeTab(PAGE_HOT);
-//                return true;
-//            case R.id.category:
-//                changeTab(PAGE_CATEGORY);
-//                return true;
-//            case R.id.clear_cache:
-//                Fresco.getImagePipeline().clearCaches();
-//                ToastUtil.getInstance().showToast(R.string.clear_cache_success);
-//                return true;
-//            case R.id.send_feed_back:
-//                startActivity(new Intent(this, FeedBackActivity.class));
-//                return true;
-//            //TODO::
-//            case R.id.support:
-//                return true;
-//            case R.id.about:
-//                startActivity(new Intent(this, About.class));
-//                return true;
-//            case R.id.log_in:
-//                mLoadingDialog.show();
-//                WxUtils.loginIn(this);
-//                return true;
-//            case R.id.log_out:
-//                WxUtils.logOut(this);
-//                return true;
-//            default:
-//                break;
-//        }
+        if (item.getGroupId() == R.id.group_tab) {
+            item.setChecked(true);
+        }
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        switch (item.getItemId()) {
+            case R.id.hot:
+                changeTab(PAGE_HOT);
+                return true;
+            case R.id.category:
+                changeTab(PAGE_CATEGORY);
+                return true;
+            case R.id.clear_cache:
+                Fresco.getImagePipeline().clearCaches();
+                ToastUtil.getInstance().showToast(R.string.clear_cache_success);
+                return true;
+            case R.id.send_feed_back:
+                startActivity(new Intent(this, FeedBackActivity.class));
+                return true;
+            //TODO::
+            case R.id.support:
+                return true;
+            case R.id.about:
+                startActivity(new Intent(this, About.class));
+                return true;
+            case R.id.log_in:
+                mLoadingDialog.show();
+                WxUtils.loginIn(this);
+                return true;
+            case R.id.log_out:
+                WxUtils.logOut(this);
+                return true;
+            default:
+                break;
+        }
         return true;
     }
 }

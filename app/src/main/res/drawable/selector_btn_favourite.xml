@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:action="http://schemas.android.com/apk/res/us.wili.qtwallpaper">
+    <item android:drawable="@drawable/btn_favourite_active"
+        action:stateActive="true"/>
+    <item android:drawable="@drawable/btn_favourite_normal"
+        action:stateActive="false"/>
+</selector>

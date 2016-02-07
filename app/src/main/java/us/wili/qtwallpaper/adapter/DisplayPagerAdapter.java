@@ -22,6 +22,7 @@ import us.wili.qtwallpaper.global.MobileConfig;
 import us.wili.qtwallpaper.model.WallpaperItem;
 import us.wili.qtwallpaper.utils.PictureUtils;
 import us.wili.qtwallpaper.widget.DisplayProgressDrawable;
+import us.wili.qtwallpaper.widget.PictureOperationView;
 
 /**
  * DisplayActivity的Adapter
@@ -35,11 +36,7 @@ public class DisplayPagerAdapter extends PagerAdapter implements View.OnClickLis
 
     private ResizeOptions bannerResizeOption;
 
-    public interface onWallPaperClickListener {
-        void onClick(WallpaperItem item);
-    }
-
-    private onWallPaperClickListener clickListener;
+    private PictureOperationView mOperationView;
 
     public DisplayPagerAdapter(Context context, ArrayList<WallpaperItem> items) {
         mItems = items;
@@ -55,10 +52,6 @@ public class DisplayPagerAdapter extends PagerAdapter implements View.OnClickLis
             mViews[i].setOnClickListener(this);
         }
         bannerResizeOption = new ResizeOptions(MobileConfig.screenWidth, MobileConfig.screenHeight);
-    }
-
-    public void setOnWallPaperClickListener(onWallPaperClickListener clickListener) {
-        this.clickListener = clickListener;
     }
 
     @Override
@@ -93,6 +86,9 @@ public class DisplayPagerAdapter extends PagerAdapter implements View.OnClickLis
                 .build();
         draweeView.setController(controller);
         draweeView.setTag(model);
+        if (mOperationView != null) {
+            mOperationView.setWallpaperItem(model);
+        }
         return view;
     }
 
@@ -103,8 +99,14 @@ public class DisplayPagerAdapter extends PagerAdapter implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if (clickListener != null && v.getTag() != null && v.getTag() instanceof WallpaperItem) {
-            clickListener.onClick((WallpaperItem) v.getTag());
+        if (mOperationView.isShowing()) {
+            mOperationView.dismiss();
+        } else {
+            mOperationView.show();
         }
+    }
+
+    public void setOperationView(PictureOperationView mOperationView) {
+        this.mOperationView = mOperationView;
     }
 }

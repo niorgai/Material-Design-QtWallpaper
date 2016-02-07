@@ -21,7 +21,7 @@ import us.wili.qtwallpaper.widget.SlideFinishLayout;
  * 展示壁纸的Activity
  * Created by qiu on 1/19/16.
  */
-public class WallPaperDisplayActivity extends AppCompatActivity implements DisplayPagerAdapter.onWallPaperClickListener {
+public class WallPaperDisplayActivity extends AppCompatActivity {
 
     public static final String WALLPAPERS = "wallpapers";
     public static final String INDEX = "index";
@@ -36,8 +36,6 @@ public class WallPaperDisplayActivity extends AppCompatActivity implements Displ
     private Handler delayLoadHandler;
 
     private ViewPager mViewPager;
-
-    private PictureOperationView operationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +73,6 @@ public class WallPaperDisplayActivity extends AppCompatActivity implements Displ
             }
         });
 
-        operationView = (PictureOperationView) findViewById(R.id.operation_view);
     }
 
     protected void initData() {
@@ -83,7 +80,8 @@ public class WallPaperDisplayActivity extends AppCompatActivity implements Displ
         int index = intent.getIntExtra(INDEX, 0);
         ArrayList<WallpaperItem> items = intent.getParcelableArrayListExtra(WALLPAPERS);
         DisplayPagerAdapter mAdapter = new DisplayPagerAdapter(this, items);
-        mAdapter.setOnWallPaperClickListener(this);
+        PictureOperationView operationView = (PictureOperationView) findViewById(R.id.operation_view);
+        mAdapter.setOperationView(operationView);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(index);
     }
@@ -96,14 +94,5 @@ public class WallPaperDisplayActivity extends AppCompatActivity implements Displ
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);
-    }
-
-    @Override
-    public void onClick(WallpaperItem item) {
-        if (!operationView.isShowing()) {
-            operationView.show();
-        } else {
-            operationView.dismiss();
-        }
     }
 }

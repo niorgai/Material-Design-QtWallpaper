@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.model.WallpaperItem;
 
 /**
  * 操作图片
@@ -18,13 +19,15 @@ import us.wili.qtwallpaper.R;
  */
 public class PictureOperationView extends LinearLayout {
 
+    private final int ANIMATION_DURATION = 1000;
+    private final int ANIMATION_DELAY = 100;
+
     private ArrayList<ImageView> imageViews;
 
     private boolean isInAnimation = false;
     private boolean isShowing = false;
 
-    private final int ANIMATION_DURATION = 1000;
-    private final int ANIMATION_DELAY = 100;
+    private WallpaperItem mWallpaperItem;
 
     public PictureOperationView(Context context) {
         this(context, null);
@@ -132,5 +135,9 @@ public class PictureOperationView extends LinearLayout {
     public void dismiss() {
         setVisibility(GONE);
         isShowing = false;
+    }
+
+    public void setWallpaperItem(WallpaperItem mWallpaperItem) {
+        this.mWallpaperItem = mWallpaperItem;
     }
 }

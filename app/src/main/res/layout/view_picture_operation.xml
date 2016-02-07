@@ -4,40 +4,40 @@
     android:gravity="bottom"
     android:layout_height="match_parent">
 
-    <ImageView
+    <us.wili.qtwallpaper.widget.ActiveImageView
         android:id="@+id/img1"
-        android:src="@drawable/ic_default_avatar"
+        android:src="@drawable/selector_btn_save"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
-        android:layout_margin="10dp"
+        android:padding="15dp"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 
-    <ImageView
+    <us.wili.qtwallpaper.widget.ActiveImageView
         android:id="@+id/img2"
-        android:src="@drawable/ic_default_avatar"
-        android:layout_margin="10dp"
+        android:src="@drawable/selector_btn_view"
+        android:padding="15dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 
-    <ImageView
+    <us.wili.qtwallpaper.widget.ActiveImageView
         android:id="@+id/img3"
-        android:src="@drawable/ic_default_avatar"
-        android:layout_margin="10dp"
+        android:src="@drawable/selector_btn_favourite"
+        android:padding="15dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
 
-    <ImageView
+    <us.wili.qtwallpaper.widget.ActiveImageView
         android:id="@+id/img4"
-        android:src="@drawable/ic_default_avatar"
-        android:layout_margin="10dp"
+        android:src="@drawable/selector_btn_filp"
+        android:padding="15dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:layout_weight="1"

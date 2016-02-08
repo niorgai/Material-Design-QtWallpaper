@@ -154,19 +154,40 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
         }
     }
 
+    //翻转动画
     private void flip() {
         for (final ActiveImageView view : imageViews) {
-            view.animate().rotationY(180).setDuration(1000).setInterpolator(new LinearInterpolator()).setListener(new Animator.AnimatorListener() {
+            view.animate().rotationYBy(90).setDuration(200).setInterpolator(new LinearInterpolator()).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
-
+                    view.setEnabled(false);
                 }
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    view.setRotationY(0);
                     view.toggleFirstSide();
-                    PictureOperationView.this.getParent().requestLayout();
+                    view.setRotationY(270);
+                    view.animate().rotationYBy(90).setDuration(200).setInterpolator(new LinearInterpolator()).setListener(new Animator.AnimatorListener() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            view.setEnabled(true);
+                        }
+
+                        @Override
+                        public void onAnimationCancel(Animator animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animator animation) {
+
+                        }
+                    }).start();
                 }
 
                 @Override

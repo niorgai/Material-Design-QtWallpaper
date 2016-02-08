@@ -57,11 +57,15 @@ public class ActiveImageView extends ImageView {
     }
 
     public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
+        if (this.isActive != isActive) {
+            this.isActive = isActive;
+            refreshDrawableState();
+        }
     }
 
     public void toggleActive() {
         isActive = !isActive;
+        refreshDrawableState();
     }
 
     public boolean isFirstSide() {
@@ -69,10 +73,14 @@ public class ActiveImageView extends ImageView {
     }
 
     public void setIsFirstSide(boolean isFirstSide) {
-        this.isFirstSide = isFirstSide;
+        if (this.isFirstSide != isFirstSide) {
+            this.isFirstSide = isFirstSide;
+            refreshDrawableState();
+        }
     }
 
     public void toggleFirstSide() {
         isFirstSide = !isFirstSide;
+        refreshDrawableState();
     }
 }

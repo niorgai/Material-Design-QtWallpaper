@@ -3,10 +3,10 @@
     xmlns:action="http://schemas.android.com/apk/res/us.wili.qtwallpaper">
     <item android:drawable="@drawable/btn_save_active"
         action:is_first_side="true"
-        action:state_active="true"/>
+        android:state_pressed="true"/>
     <item android:drawable="@drawable/btn_save_normal"
         action:is_first_side="true"
-        action:state_active="false"/>
+        android:state_pressed="false"/>
     <item android:drawable="@drawable/btn_wechat_active"
         action:is_first_side="false"
         android:state_pressed="true"/>

@@ -2,7 +2,15 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:action="http://schemas.android.com/apk/res/us.wili.qtwallpaper">
     <item android:drawable="@drawable/btn_view_active"
-        action:stateActive="true"/>
+        action:is_first_side="true"
+        action:state_active="true"/>
     <item android:drawable="@drawable/btn_view_normal"
-        action:stateActive="false"/>
+        action:is_first_side="true"
+        action:state_active="false"/>
+    <item android:drawable="@drawable/btn_qq_active"
+        action:is_first_side="false"
+        android:state_pressed="true"/>
+    <item android:drawable="@drawable/btn_qq_normal"
+        action:is_first_side="false"
+        android:state_pressed="false"/>
 </selector>

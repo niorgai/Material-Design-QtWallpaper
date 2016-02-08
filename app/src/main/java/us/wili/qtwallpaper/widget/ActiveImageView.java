@@ -12,9 +12,13 @@ import us.wili.qtwallpaper.R;
  */
 public class ActiveImageView extends ImageView {
 
-    private static final int[] STATE_ACTIVE = {R.attr.stateActive};
+    private static final int[] STATE_ACTIVE = {R.attr.state_active};
+
+    private static final int[] FIRST_SIDE = {R.attr.is_first_side};
 
     private boolean isActive = false;
+
+    private boolean isFirstSide = true;
 
     public ActiveImageView(Context context) {
         this(context, null);
@@ -30,12 +34,22 @@ public class ActiveImageView extends ImageView {
 
     @Override
     public int[] onCreateDrawableState(int extraSpace) {
-        if (isActive) {
-            final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
+        int[] drawableState = super.onCreateDrawableState(extraSpace);
+        if (isActive && isFirstSide) {
+            drawableState = super.onCreateDrawableState(extraSpace + 2);
             mergeDrawableStates(drawableState, STATE_ACTIVE);
-            return drawableState;
+            mergeDrawableStates(drawableState, FIRST_SIDE);
+        } else {
+            if (isFirstSide) {
+                drawableState = super.onCreateDrawableState(extraSpace + 1);
+                mergeDrawableStates(drawableState, FIRST_SIDE);
+            }
+            if (isActive) {
+                drawableState = super.onCreateDrawableState(extraSpace + 1);
+                mergeDrawableStates(drawableState, STATE_ACTIVE);
+            }
         }
-        return super.onCreateDrawableState(extraSpace);
+        return drawableState;
     }
 
     public boolean isActive() {
@@ -44,5 +58,21 @@ public class ActiveImageView extends ImageView {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public void toggleActive() {
+        isActive = !isActive;
+    }
+
+    public boolean isFirstSide() {
+        return isFirstSide;
+    }
+
+    public void setIsFirstSide(boolean isFirstSide) {
+        this.isFirstSide = isFirstSide;
+    }
+
+    public void toggleFirstSide() {
+        isFirstSide = !isFirstSide;
     }
 }

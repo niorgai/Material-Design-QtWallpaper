@@ -2,6 +2,7 @@
 <resources>
     
     <declare-styleable name="ActiveImageView">
-        <attr name="stateActive" format="boolean"/>
+        <attr name="state_active" format="boolean"/>
+        <attr name="is_first_side" format="boolean"/>
     </declare-styleable>
 </resources>

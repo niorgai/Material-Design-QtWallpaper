@@ -5,7 +5,8 @@ import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.widget.ImageView;
+import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ import us.wili.qtwallpaper.model.WallpaperItem;
  * 操作图片
  * Created by qiu on 2/6/16.
  */
-public class PictureOperationView extends LinearLayout {
+public class PictureOperationView extends LinearLayout implements View.OnClickListener {
 
     private final int ANIMATION_DURATION = 1000;
     private final int ANIMATION_DELAY = 100;
 
-    private ArrayList<ImageView> imageViews;
+    private ArrayList<ActiveImageView> imageViews;
 
     private boolean isInAnimation = false;
     private boolean isShowing = false;
@@ -48,10 +49,13 @@ public class PictureOperationView extends LinearLayout {
         setGravity(Gravity.BOTTOM);
         setOrientation(HORIZONTAL);
         imageViews = new ArrayList<>();
-        imageViews.add((ImageView) findViewById(R.id.img1));
-        imageViews.add((ImageView) findViewById(R.id.img2));
-        imageViews.add((ImageView) findViewById(R.id.img3));
-        imageViews.add((ImageView) findViewById(R.id.img4));
+        imageViews.add((ActiveImageView) findViewById(R.id.img1));
+        imageViews.add((ActiveImageView) findViewById(R.id.img2));
+        imageViews.add((ActiveImageView) findViewById(R.id.img3));
+        imageViews.add((ActiveImageView) findViewById(R.id.img4));
+        for (View view : imageViews) {
+            view.setOnClickListener(this);
+        }
     }
 
     private TimeInterpolator enterInterpolator = new TimeInterpolator() {
@@ -139,5 +143,42 @@ public class PictureOperationView extends LinearLayout {
 
     public void setWallpaperItem(WallpaperItem mWallpaperItem) {
         this.mWallpaperItem = mWallpaperItem;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img4:
+                flip();
+                break;
+        }
+    }
+
+    private void flip() {
+        for (final ActiveImageView view : imageViews) {
+            view.animate().rotationY(180).setDuration(1000).setInterpolator(new LinearInterpolator()).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    view.setRotationY(0);
+                    view.toggleFirstSide();
+                    PictureOperationView.this.getParent().requestLayout();
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            }).start();
+        }
     }
 }

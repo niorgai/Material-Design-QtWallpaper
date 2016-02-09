@@ -33,7 +33,6 @@ import us.wili.qtwallpaper.fragment.HotFragment;
 import us.wili.qtwallpaper.global.MobileConfig;
 import us.wili.qtwallpaper.utils.ToastUtil;
 import us.wili.qtwallpaper.utils.WxUtils;
-import us.wili.qtwallpaper.widget.PictureOperationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -182,12 +181,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        ((PictureOperationView) findViewById(R.id.operation_view)).show();
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                mDrawerLayout.openDrawer(GravityCompat.START);
-//                return true;
-//        }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -73,6 +73,7 @@ public class CategoryFragment extends BaseFragment implements SwipeRefreshLayout
     @Override
     public void onRefresh() {
         AVQuery<CategoryItem> bannerQuery = AVQuery.getQuery(CategoryItem.class);
+        bannerQuery.setCachePolicy(AVQuery.CachePolicy.NETWORK_ELSE_CACHE);
         bannerQuery.findInBackground(new AVCallback<CategoryItem>() {
             @Override
             protected void onSuccess(List<CategoryItem> list) {

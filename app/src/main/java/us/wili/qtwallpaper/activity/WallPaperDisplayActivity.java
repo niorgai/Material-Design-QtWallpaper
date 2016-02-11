@@ -37,6 +37,8 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
+    private PictureOperationView operationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +82,7 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
         int index = intent.getIntExtra(INDEX, 0);
         ArrayList<WallpaperItem> items = intent.getParcelableArrayListExtra(WALLPAPERS);
         DisplayPagerAdapter mAdapter = new DisplayPagerAdapter(this, items);
-        PictureOperationView operationView = (PictureOperationView) findViewById(R.id.operation_view);
+        operationView = (PictureOperationView) findViewById(R.id.operation_view);
         mAdapter.setOperationView(operationView);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(index);
@@ -89,7 +91,6 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
     protected void onDelayLoad() {
 
     }
-
     @Override
     public void finish() {
         super.finish();

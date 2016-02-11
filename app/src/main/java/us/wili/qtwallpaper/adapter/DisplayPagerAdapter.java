@@ -86,9 +86,6 @@ public class DisplayPagerAdapter extends PagerAdapter implements View.OnClickLis
                 .build();
         draweeView.setController(controller);
         draweeView.setTag(model);
-        if (mOperationView != null) {
-            mOperationView.setWallpaperItem(model);
-        }
         return view;
     }
 
@@ -102,7 +99,13 @@ public class DisplayPagerAdapter extends PagerAdapter implements View.OnClickLis
         if (mOperationView.isShowing()) {
             mOperationView.dismiss();
         } else {
-            mOperationView.show();
+            if (v.getTag() != null && v.getTag() instanceof WallpaperItem) {
+                WallpaperItem item = (WallpaperItem) v.getTag();
+                if (mOperationView.getWallpaperItem() == null || !mOperationView.getWallpaperItem().imageUrl.equals(item.imageUrl)) {
+                    mOperationView.setWallpaperItem(item);
+                    mOperationView.show();
+                }
+            }
         }
     }
 

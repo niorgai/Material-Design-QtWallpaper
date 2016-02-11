@@ -36,4 +36,7 @@
     <string name="about_qt_wall_paper">关于晴天壁纸</string>
     <string name="about">关于</string>
     <string name="about_protocol">隐私协议</string>
+
+    <!-- 壁纸-->
+    <string name="set_as">设置为</string>
 </resources>

@@ -116,10 +116,12 @@ public class SlideFinishLayout extends FrameLayout {
                 break;
             case MotionEvent.ACTION_MOVE:
                 int moveY = (int) event.getY();
-                //判断是y方向的滑动则开始view的滑动
-                if (!isSliding && moveY - mInitY > mTouchSlop && Math.abs((int) event.getRawX() - mInitX) < mTouchSlop) {
-                    isSliding = true;
-                    return true;
+                //向下滑动
+                if (!isSliding && moveY - mInitY > mTouchSlop) {
+                    if (Math.abs((int)event.getRawY() - mInitY) < mTouchSlop && Math.abs((int) event.getRawX() - mInitX) < mTouchSlop) {
+                        isSliding = true;
+                        return true;
+                    }
                 }
                 break;
         }

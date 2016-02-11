@@ -3,6 +3,7 @@ package us.wili.qtwallpaper.widget;
 import android.animation.Animator;
 import android.animation.TimeInterpolator;
 import android.content.Context;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.model.WallpaperItem;
+import us.wili.qtwallpaper.utils.PictureUtils;
+import us.wili.qtwallpaper.utils.WxUtils;
 
 /**
  * 操作图片
@@ -86,7 +89,6 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                     @Override
                     public void onAnimationStart(Animator animation) {
                         isInAnimation = true;
-                        isShowing = true;
                     }
 
                     @Override
@@ -114,6 +116,7 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         isInAnimation = false;
+                        isShowing = true;
                     }
 
                     @Override
@@ -145,13 +148,47 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
         this.mWallpaperItem = mWallpaperItem;
     }
 
+    public WallpaperItem getWallpaperItem() {
+        return mWallpaperItem;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.img1:
+                if (imageViews.get(0).isFirstSide()) {
+                    PictureUtils.setWallpaper(getContext(), Uri.parse(mWallpaperItem.imageUrl));
+                } else {
+                    //TODO::分享给QQ好友
+                }
+                break;
+            case R.id.img2:
+                if (imageViews.get(1).isFirstSide()) {
+                    previewWallPaper();
+                } else {
+                    WxUtils.shareToWxSession();
+                }
+                break;
+            case R.id.img3:
+                if (imageViews.get(2).isFirstSide()) {
+                    toggleFavourite();
+                } else {
+                    WxUtils.shareToWxMoment();
+                }
             case R.id.img4:
                 flip();
                 break;
         }
+    }
+
+    //预览壁纸
+    private void previewWallPaper() {
+
+    }
+
+    //设置/取消收藏
+    private void toggleFavourite() {
+
     }
 
     //翻转动画

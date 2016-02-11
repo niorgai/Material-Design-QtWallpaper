@@ -133,4 +133,14 @@ public class WxUtils {
         manager.sendBroadcast(intent);
     }
 
+    //分享给微信好友
+    public static void shareToWxSession() {
+
+    }
+
+    //分享给微信朋友圈
+    public static void shareToWxMoment() {
+
+    }
+
 }

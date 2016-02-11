@@ -7,10 +7,10 @@
     <item android:drawable="@drawable/btn_view_normal"
         action:is_first_side="true"
         android:state_pressed="false"/>
-    <item android:drawable="@drawable/btn_qq_active"
+    <item android:drawable="@drawable/btn_wechat_active"
         action:is_first_side="false"
         android:state_pressed="true"/>
-    <item android:drawable="@drawable/btn_qq_normal"
+    <item android:drawable="@drawable/btn_wechat_normal"
         action:is_first_side="false"
         android:state_pressed="false"/>
 </selector>

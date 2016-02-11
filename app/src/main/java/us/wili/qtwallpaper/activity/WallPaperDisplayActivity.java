@@ -21,7 +21,7 @@ import us.wili.qtwallpaper.widget.SlideFinishLayout;
  * 展示壁纸的Activity
  * Created by qiu on 1/19/16.
  */
-public class WallPaperDisplayActivity extends AppCompatActivity {
+public class WallPaperDisplayActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     public static final String WALLPAPERS = "wallpapers";
     public static final String INDEX = "index";
@@ -37,7 +37,9 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
-    private PictureOperationView operationView;
+    private PictureOperationView mOperationView;
+
+    private ArrayList<WallpaperItem> mItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +82,14 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
     protected void initData() {
         Intent intent = getIntent();
         int index = intent.getIntExtra(INDEX, 0);
-        ArrayList<WallpaperItem> items = intent.getParcelableArrayListExtra(WALLPAPERS);
-        DisplayPagerAdapter mAdapter = new DisplayPagerAdapter(this, items);
-        operationView = (PictureOperationView) findViewById(R.id.operation_view);
-        mAdapter.setOperationView(operationView);
+        mItems = intent.getParcelableArrayListExtra(WALLPAPERS);
+        DisplayPagerAdapter mAdapter = new DisplayPagerAdapter(this, mItems);
+        mOperationView = (PictureOperationView) findViewById(R.id.operation_view);
+        mAdapter.setOperationView(mOperationView);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setCurrentItem(index);
+        mOperationView.setWallpaperItem(mItems.get(index));
+        mViewPager.addOnPageChangeListener(this);
     }
 
     protected void onDelayLoad() {
@@ -95,5 +99,20 @@ public class WallPaperDisplayActivity extends AppCompatActivity {
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        mOperationView.setWallpaperItem(mItems.get(position));
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

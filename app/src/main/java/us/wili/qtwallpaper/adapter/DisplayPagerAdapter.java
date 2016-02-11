@@ -99,13 +99,7 @@ public class DisplayPagerAdapter extends PagerAdapter implements View.OnClickLis
         if (mOperationView.isShowing()) {
             mOperationView.dismiss();
         } else {
-            if (v.getTag() != null && v.getTag() instanceof WallpaperItem) {
-                WallpaperItem item = (WallpaperItem) v.getTag();
-                if (mOperationView.getWallpaperItem() == null || !mOperationView.getWallpaperItem().imageUrl.equals(item.imageUrl)) {
-                    mOperationView.setWallpaperItem(item);
-                    mOperationView.show();
-                }
-            }
+            mOperationView.show();
         }
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
@@ -95,6 +96,13 @@ public class WallPaperDisplayActivity extends AppCompatActivity implements ViewP
     protected void onDelayLoad() {
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mOperationView.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @Override
     public void finish() {
         super.finish();

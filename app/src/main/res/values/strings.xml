@@ -39,4 +39,9 @@
 
     <!-- 壁纸-->
     <string name="set_as">设置为</string>
+    <string name="set_wallpaper_success">设置壁纸成功</string>
+    <string name="set_wallpaper_fail">设置壁纸失败</string>
+    <string name="set_wallpaper_need_permission">壁纸需要保存到本地,请允许读取存储卡权限</string>
+    <string name="click_to_grant_permission">点击请求获取权限</string>
+    <string name="set_wallpaper_grant_permission_fail">获取存储卡权限失败</string>
 </resources>

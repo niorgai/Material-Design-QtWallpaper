@@ -1,9 +1,16 @@
 package us.wili.qtwallpaper.widget;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.TimeInterpolator;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -15,6 +22,7 @@ import java.util.ArrayList;
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.model.WallpaperItem;
 import us.wili.qtwallpaper.utils.PictureUtils;
+import us.wili.qtwallpaper.utils.ToastUtil;
 import us.wili.qtwallpaper.utils.WxUtils;
 
 /**
@@ -22,6 +30,8 @@ import us.wili.qtwallpaper.utils.WxUtils;
  * Created by qiu on 2/6/16.
  */
 public class PictureOperationView extends LinearLayout implements View.OnClickListener {
+
+    private final int CODE_REQUEST_WRITE_STORAGE = 8;
 
     private final int ANIMATION_DURATION = 1000;
     private final int ANIMATION_DELAY = 100;
@@ -157,7 +167,7 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
         switch (v.getId()) {
             case R.id.img1:
                 if (imageViews.get(0).isFirstSide()) {
-                    PictureUtils.setWallpaper(getContext(), Uri.parse(mWallpaperItem.imageUrl));
+                    setWallPaper();
                 } else {
                     //TODO::分享给QQ好友
                 }
@@ -178,6 +188,38 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
             case R.id.img4:
                 flip();
                 break;
+        }
+    }
+
+    //设置壁纸,需要判断是否有读取内存卡的权限
+    private void setWallPaper() {
+        //首先检查是否拥有权限
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            final Activity activity = (Activity) getContext();
+            //接着判断是否需要给予获取权限的提示
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Snackbar.make(this, getContext().getString(R.string.set_wallpaper_need_permission), Snackbar.LENGTH_LONG).setAction(getContext().getString(R.string.click_to_grant_permission), new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_REQUEST_WRITE_STORAGE);
+                    }
+                }).show();
+            } else {
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CODE_REQUEST_WRITE_STORAGE);
+            }
+        } else {
+            PictureUtils.setWallpaper(getContext(), Uri.parse(mWallpaperItem.imageUrl));
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == CODE_REQUEST_WRITE_STORAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //权限获取成功
+                PictureUtils.setWallpaper(getContext(), Uri.parse(mWallpaperItem.imageUrl));
+            } else {
+                ToastUtil.getInstance().showToast(R.string.set_wallpaper_grant_permission_fail);
+            }
         }
     }
 

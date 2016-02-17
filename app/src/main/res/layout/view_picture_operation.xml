@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <us.wili.qtwallpaper.widget.ActiveImageView
-        android:id="@+id/img1"
+        android:id="@+id/save"
         android:src="@drawable/selector_btn_save"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
@@ -15,17 +15,7 @@
         android:layout_height="72dp" />
 
     <us.wili.qtwallpaper.widget.ActiveImageView
-        android:id="@+id/img2"
-        android:src="@drawable/selector_btn_view"
-        android:adjustViewBounds="true"
-        android:contentDescription="@null"
-        android:layout_margin="16dp"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="72dp" />
-
-    <us.wili.qtwallpaper.widget.ActiveImageView
-        android:id="@+id/img3"
+        android:id="@+id/favourite"
         android:src="@drawable/selector_btn_favourite"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
@@ -35,8 +25,18 @@
         android:layout_height="72dp" />
 
     <us.wili.qtwallpaper.widget.ActiveImageView
-        android:id="@+id/img4"
-        android:src="@drawable/selector_btn_flip"
+        android:id="@+id/session"
+        android:src="@drawable/selector_btn_wx_session"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:layout_margin="16dp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="72dp" />
+
+    <us.wili.qtwallpaper.widget.ActiveImageView
+        android:id="@+id/moment"
+        android:src="@drawable/selector_btn_wx_moment"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:layout_margin="16dp"

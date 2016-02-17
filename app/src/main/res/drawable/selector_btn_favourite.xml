@@ -2,15 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:action="http://schemas.android.com/apk/res/us.wili.qtwallpaper">
     <item android:drawable="@drawable/btn_favourite_active"
-        action:is_first_side="true"
         action:state_active="true"/>
     <item android:drawable="@drawable/btn_favourite_normal"
-        action:is_first_side="true"
         action:state_active="false"/>
-    <item android:drawable="@drawable/btn_moment_active"
-        action:is_first_side="false"
-        android:state_pressed="true"/>
-    <item android:drawable="@drawable/btn_moment_normal"
-        action:is_first_side="false"
-        android:state_pressed="false"/>
 </selector>

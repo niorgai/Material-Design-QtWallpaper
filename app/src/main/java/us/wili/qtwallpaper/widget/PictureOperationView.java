@@ -14,7 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -62,10 +61,10 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
         setGravity(Gravity.BOTTOM);
         setOrientation(HORIZONTAL);
         imageViews = new ArrayList<>();
-        imageViews.add((ActiveImageView) findViewById(R.id.img1));
-        imageViews.add((ActiveImageView) findViewById(R.id.img2));
-        imageViews.add((ActiveImageView) findViewById(R.id.img3));
-        imageViews.add((ActiveImageView) findViewById(R.id.img4));
+        imageViews.add((ActiveImageView) findViewById(R.id.save));
+        imageViews.add((ActiveImageView) findViewById(R.id.favourite));
+        imageViews.add((ActiveImageView) findViewById(R.id.session));
+        imageViews.add((ActiveImageView) findViewById(R.id.moment));
         for (View view : imageViews) {
             view.setOnClickListener(this);
         }
@@ -165,28 +164,17 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.img1:
-                if (imageViews.get(0).isFirstSide()) {
-                    setWallPaper();
-                } else {
-                    //TODO::分享给QQ好友
-                }
+            case R.id.save:
+                setWallPaper();
                 break;
-            case R.id.img2:
-                if (imageViews.get(1).isFirstSide()) {
-                    previewWallPaper();
-                } else {
-                    WxUtils.shareToWxSession();
-                }
+            case R.id.favourite:
+                toggleFavourite();
                 break;
-            case R.id.img3:
-                if (imageViews.get(2).isFirstSide()) {
-                    toggleFavourite();
-                } else {
-                    WxUtils.shareToWxMoment();
-                }
-            case R.id.img4:
-                flip();
+            case R.id.session:
+                WxUtils.shareToWxSession();
+                break;
+            case R.id.moment:
+                WxUtils.shareToWxMoment();
                 break;
         }
     }
@@ -223,62 +211,8 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
         }
     }
 
-    //预览壁纸
-    private void previewWallPaper() {
-
-    }
-
     //设置/取消收藏
     private void toggleFavourite() {
 
-    }
-
-    //翻转动画
-    private void flip() {
-        for (final ActiveImageView view : imageViews) {
-            view.animate().rotationYBy(90).setDuration(200).setInterpolator(new LinearInterpolator()).setListener(new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                    view.setEnabled(false);
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    view.toggleFirstSide();
-                    view.setRotationY(270);
-                    view.animate().rotationYBy(90).setDuration(200).setInterpolator(new LinearInterpolator()).setListener(new Animator.AnimatorListener() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            view.setEnabled(true);
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animator animation) {
-
-                        }
-                    }).start();
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-
-                }
-            }).start();
-        }
     }
 }

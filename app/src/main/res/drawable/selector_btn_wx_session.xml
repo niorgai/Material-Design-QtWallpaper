@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:action="http://schemas.android.com/apk/res/us.wili.qtwallpaper">
-    <item android:drawable="@drawable/btn_view_active"
-        action:is_first_side="true"
-        android:state_pressed="true"/>
-    <item android:drawable="@drawable/btn_view_normal"
-        action:is_first_side="true"
-        android:state_pressed="false"/>
     <item android:drawable="@drawable/btn_wechat_active"
-        action:is_first_side="false"
+        action:state_active="true"
         android:state_pressed="true"/>
     <item android:drawable="@drawable/btn_wechat_normal"
-        action:is_first_side="false"
+        action:state_active="false"
         android:state_pressed="false"/>
 </selector>

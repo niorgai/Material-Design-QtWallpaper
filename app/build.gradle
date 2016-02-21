@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'qtwallpaper.keystore'
+            keyPassword 'qtwallpaper'
+            storeFile file('/Users/qiu/git/github/Material-Design-QtWallpaper/qtwallpaper.keystore')
+            storePassword 'qtwallpaper'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
-
     defaultConfig {
         applicationId "us.wili.qtwallpaper"
         minSdkVersion 14
@@ -17,12 +24,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
     }
-
 }
 
 dependencies {
@@ -31,9 +36,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
-//  Image: fresco
+    //  Image: fresco
     compile 'com.facebook.fresco:fresco:0.8.1'
     //avoscloud-sdk 为 LeanCloud基础包
     compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
-
 }

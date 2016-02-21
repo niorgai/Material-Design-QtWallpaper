@@ -16,6 +16,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.SaveCallback;
+
 import java.util.ArrayList;
 
 import us.wili.qtwallpaper.R;
@@ -41,6 +45,8 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
     private boolean isShowing = false;
 
     private WallpaperItem mWallpaperItem;
+
+    private AVUser mCurrentUser;
 
     public PictureOperationView(Context context) {
         this(context, null);
@@ -68,6 +74,8 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
         for (View view : imageViews) {
             view.setOnClickListener(this);
         }
+
+        mCurrentUser = AVUser.getCurrentUser();
     }
 
     private TimeInterpolator enterInterpolator = new TimeInterpolator() {
@@ -155,6 +163,14 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
 
     public void setWallpaperItem(WallpaperItem mWallpaperItem) {
         this.mWallpaperItem = mWallpaperItem;
+        if (mCurrentUser != null) {
+            ArrayList favs = (ArrayList) mCurrentUser.get("favourites");
+            if (favs.contains(mWallpaperItem.imageUrl)) {
+                imageViews.get(1).setIsActive(true);
+            } else {
+                imageViews.get(1).setIsActive(false);
+            }
+        }
     }
 
     public WallpaperItem getWallpaperItem() {
@@ -171,10 +187,10 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                 toggleFavourite();
                 break;
             case R.id.session:
-                WxUtils.shareToWxSession();
+                WxUtils.shareToWxSession((Activity) getContext(), mWallpaperItem);
                 break;
             case R.id.moment:
-                WxUtils.shareToWxMoment();
+                WxUtils.shareToWxMoment((Activity) getContext(), mWallpaperItem);
                 break;
         }
     }
@@ -213,6 +229,28 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
 
     //设置/取消收藏
     private void toggleFavourite() {
-
+        if (mCurrentUser == null) {
+            WxUtils.loginIn((Activity) getContext());
+            return;
+        }
+        ArrayList favs = (ArrayList) mCurrentUser.get("favourites");
+        if (favs.contains(mWallpaperItem.imageUrl)) {
+            favs.remove(mWallpaperItem.imageUrl);
+        } else {
+            favs.add(mWallpaperItem.imageUrl);
+        }
+        mCurrentUser.put("favourites", favs);
+        imageViews.get(1).setClickable(false);
+        mCurrentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(AVException e) {
+                if (e == null) {
+                    imageViews.get(1).toggleActive();
+                    imageViews.get(1).setClickable(true);
+                } else {
+                    ToastUtil.getInstance().showToast("操作失败");
+                }
+            }
+        });
     }
 }

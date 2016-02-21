@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 
 import com.facebook.common.executors.UiThreadImmediateExecutorService;
@@ -18,6 +19,9 @@ import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
@@ -60,8 +64,8 @@ public class PictureUtils {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final ImagePipeline pipeline = Fresco.getImagePipeline();
-                final BaseBitmapDataSubscriber subscriber = new BaseBitmapDataSubscriber() {
+                ImagePipeline pipeline = Fresco.getImagePipeline();
+                BaseBitmapDataSubscriber subscriber = new BaseBitmapDataSubscriber() {
                     @Override
                     protected void onNewResultImpl(Bitmap bitmap) {
                         setWallPaperWithBitmap(context, bitmap);
@@ -109,5 +113,28 @@ public class PictureUtils {
                 ToastUtil.getInstance().showToast(R.string.set_wallpaper_fail);
             }
         }
+    }
+
+    public static File saveWallPaperWithBitmap(Context context, Bitmap bitmap) {
+        try {
+            File dir = context.getExternalFilesDir(CATEGORY_TYPE);
+            if (dir == null) {
+                dir = Environment.getExternalStoragePublicDirectory(CATEGORY_TYPE);
+            }
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File tempFile = File.createTempFile(String.valueOf(System.currentTimeMillis() / 1000), ".jpg", dir);
+            FileOutputStream os = new FileOutputStream(tempFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, os);
+            os.flush();
+            os.close();
+            return tempFile;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

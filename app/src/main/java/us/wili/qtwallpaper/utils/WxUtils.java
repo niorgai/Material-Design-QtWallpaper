@@ -9,14 +9,18 @@ import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
 import com.avos.avoscloud.SaveCallback;
+import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.connect.BroadcastValue;
+import us.wili.qtwallpaper.model.WallpaperItem;
 
 /**
  * 微信工具类
@@ -69,6 +73,9 @@ public class WxUtils {
                                         if (!TextUtils.isEmpty(infoMap.get("headimgurl"))) {
                                             user.put("avatorUrl", infoMap.get("headimgurl"));
                                         }
+                                        if (user.get("favourites") == null) {
+                                            user.put("favourites", new ArrayList<>());
+                                        }
                                         user.saveInBackground(new SaveCallback() {
                                             @Override
                                             public void done(AVException e) {
@@ -84,6 +91,9 @@ public class WxUtils {
                                                 }
                                             }
                                         });
+                                    } else {
+                                        manager.sendBroadcast(completeIntent);
+                                        ToastUtil.getInstance().showToast(R.string.wx_login_fail);
                                     }
                                 }
 
@@ -134,13 +144,24 @@ public class WxUtils {
     }
 
     //分享给微信好友
-    public static void shareToWxSession() {
-
+    public static void shareToWxSession(Activity activity, WallpaperItem item) {
+        new ShareAction(activity)
+                .setPlatform(SHARE_MEDIA.WEIXIN)
+                .withMedia(new UMImage(activity, item.imageUrl))
+                //TODO::为什么不设置text不能分享
+                .withText("1")
+                .share();
     }
 
     //分享给微信朋友圈
-    public static void shareToWxMoment() {
-
+    public static void shareToWxMoment(Activity activity, WallpaperItem item) {
+        new ShareAction(activity)
+                .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
+                .withMedia(new UMImage(activity, item.imageUrl))
+                        //TODO::为什么不设置text不能分享
+                .withTitle(activity.getString(R.string.app_name))
+                .withText("1")
+                .share();
     }
 
 }

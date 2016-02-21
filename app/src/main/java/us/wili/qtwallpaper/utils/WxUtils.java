@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.LogInCallback;
@@ -20,6 +21,7 @@ import java.util.Map;
 
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.connect.BroadcastValue;
+import us.wili.qtwallpaper.model.User;
 import us.wili.qtwallpaper.model.WallpaperItem;
 
 /**
@@ -61,20 +63,29 @@ public class WxUtils {
                                     AVUser user = AVUser.getCurrentUser();
                                     if (user != null) {
                                         if (!TextUtils.isEmpty(infoMap.get("nickname"))) {
-                                            user.put("nickname", infoMap.get("nickname"));
+                                            user.put(User.NICK_NAME, infoMap.get("nickname"));
                                         }
                                         String sex = infoMap.get("sex");
                                         if (!TextUtils.isEmpty(sex)) {
                                             //在不为null的情况下,0为微信返回的男性
-                                            user.put("sex", sex.equals("0") ? 1 : 2);
+                                            user.put(User.SEX, sex.equals("0") ? 1 : 2);
                                         } else {
-                                            user.put("sex", "0");
+                                            user.put(User.SEX, "0");
                                         }
                                         if (!TextUtils.isEmpty(infoMap.get("headimgurl"))) {
-                                            user.put("avatorUrl", infoMap.get("headimgurl"));
+                                            user.put(User.AVATOR_URL, infoMap.get("headimgurl"));
                                         }
-                                        if (user.get("favourites") == null) {
-                                            user.put("favourites", new ArrayList<>());
+                                        if (user.get(User.FAVORITES) == null) {
+                                            user.put(User.FAVORITES, new ArrayList<>());
+                                        } else {
+                                            if (user.get(User.FAVORITES) instanceof ArrayList) {
+                                                ArrayList array = (ArrayList) user.get(User.FAVORITES);
+                                                JSONArray list = new JSONArray();
+                                                for (Object o : array) {
+                                                    list.add(o);
+                                                }
+                                                user.put(User.FAVORITES, list);
+                                            }
                                         }
                                         user.saveInBackground(new SaveCallback() {
                                             @Override

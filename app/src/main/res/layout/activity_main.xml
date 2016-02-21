@@ -36,12 +36,6 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
-        <us.wili.qtwallpaper.widget.PictureOperationView
-            android:id="@+id/operation_view"
-            android:layout_gravity="bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView

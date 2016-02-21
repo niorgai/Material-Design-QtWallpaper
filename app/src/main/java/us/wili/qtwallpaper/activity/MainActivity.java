@@ -31,6 +31,7 @@ import us.wili.qtwallpaper.dialog.LoadingDialog;
 import us.wili.qtwallpaper.fragment.CategoryFragment;
 import us.wili.qtwallpaper.fragment.HotFragment;
 import us.wili.qtwallpaper.global.MobileConfig;
+import us.wili.qtwallpaper.model.User;
 import us.wili.qtwallpaper.utils.ToastUtil;
 import us.wili.qtwallpaper.utils.WxUtils;
 
@@ -138,11 +139,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         mNavigationView.inflateMenu(R.menu.navi_menu_logout);
         AVUser user = AVUser.getCurrentUser();
-        if (user.get("avatorUrl") != null && user.get("avatorUrl") instanceof String) {
-            mAvatar.setImageURI(Uri.parse((String) user.get("avatorUrl")));
+        if (user.get(User.AVATOR_URL) != null && user.get(User.AVATOR_URL) instanceof String) {
+            mAvatar.setImageURI(Uri.parse((String) user.get(User.AVATOR_URL)));
         }
-        if (user.get("nickname") != null && user.get("nickname") instanceof CharSequence) {
-            mUserName.setText((CharSequence) user.get("nickname"));
+        if (user.get(User.NICK_NAME) != null && user.get(User.NICK_NAME) instanceof CharSequence) {
+            mUserName.setText((CharSequence) user.get(User.NICK_NAME));
         }
     }
 

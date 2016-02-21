@@ -4,18 +4,23 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.TimeInterpolator;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.alibaba.fastjson.JSONArray;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SaveCallback;
@@ -23,6 +28,8 @@ import com.avos.avoscloud.SaveCallback;
 import java.util.ArrayList;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.connect.BroadcastValue;
+import us.wili.qtwallpaper.model.User;
 import us.wili.qtwallpaper.model.WallpaperItem;
 import us.wili.qtwallpaper.utils.PictureUtils;
 import us.wili.qtwallpaper.utils.ToastUtil;
@@ -75,7 +82,16 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
             view.setOnClickListener(this);
         }
 
-        mCurrentUser = AVUser.getCurrentUser();
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(getContext());
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastValue.LOGIN);
+        filter.addAction(BroadcastValue.LOGOUT);
+        manager.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                checkFavourites();
+            }
+        }, filter);
     }
 
     private TimeInterpolator enterInterpolator = new TimeInterpolator() {
@@ -163,18 +179,23 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
 
     public void setWallpaperItem(WallpaperItem mWallpaperItem) {
         this.mWallpaperItem = mWallpaperItem;
+        checkFavourites();
+    }
+
+    //检查当前照片是否被添加到收藏
+    private void checkFavourites() {
+        mCurrentUser = AVUser.getCurrentUser();
         if (mCurrentUser != null) {
-            ArrayList favs = (ArrayList) mCurrentUser.get("favourites");
-            if (favs.contains(mWallpaperItem.imageUrl)) {
+            JSONArray array = (JSONArray) mCurrentUser.get(User.FAVORITES);
+            if (array == null) {
+                array = new JSONArray();
+            }
+            if (array.contains(mWallpaperItem.getObjectId())) {
                 imageViews.get(1).setIsActive(true);
             } else {
                 imageViews.get(1).setIsActive(false);
             }
         }
-    }
-
-    public WallpaperItem getWallpaperItem() {
-        return mWallpaperItem;
     }
 
     @Override
@@ -233,13 +254,16 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
             WxUtils.loginIn((Activity) getContext());
             return;
         }
-        ArrayList favs = (ArrayList) mCurrentUser.get("favourites");
-        if (favs.contains(mWallpaperItem.imageUrl)) {
-            favs.remove(mWallpaperItem.imageUrl);
-        } else {
-            favs.add(mWallpaperItem.imageUrl);
+        JSONArray array = (JSONArray) mCurrentUser.get(User.FAVORITES);
+        if (array == null) {
+            array = new JSONArray();
         }
-        mCurrentUser.put("favourites", favs);
+        if (array.contains(mWallpaperItem.getObjectId())) {
+            array.remove(mWallpaperItem.getObjectId());
+        } else {
+            array.add(mWallpaperItem.getObjectId());
+        }
+        mCurrentUser.put(User.FAVORITES, array);
         imageViews.get(1).setClickable(false);
         mCurrentUser.saveInBackground(new SaveCallback() {
             @Override
@@ -248,7 +272,7 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                     imageViews.get(1).toggleActive();
                     imageViews.get(1).setClickable(true);
                 } else {
-                    ToastUtil.getInstance().showToast("操作失败");
+                    ToastUtil.getInstance().showToast(R.string.operate_fail);
                 }
             }
         });

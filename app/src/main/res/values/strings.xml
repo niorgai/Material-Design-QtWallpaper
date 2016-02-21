@@ -44,4 +44,7 @@
     <string name="set_wallpaper_need_permission">壁纸需要保存到本地,请允许读取存储卡权限</string>
     <string name="click_to_grant_permission">点击请求获取权限</string>
     <string name="set_wallpaper_grant_permission_fail">获取存储卡权限失败</string>
+
+    <!-- 收藏-->
+    <string name="operate_fail">操作失败</string>
 </resources>

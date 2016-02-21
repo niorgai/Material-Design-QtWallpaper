@@ -98,7 +98,7 @@ public class SlideFinishLayout extends FrameLayout {
         super.onLayout(changed, l, t, r, b);
         if (changed) {
             mParentView = (View) getParent();
-            mViewHeight = getHeight() + mStatusBarHeight + mNavBarHeight;
+            mViewHeight = getHeight() + mNavBarHeight;
         }
     }
 
@@ -108,7 +108,11 @@ public class SlideFinishLayout extends FrameLayout {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mInitX = (int) event.getRawX();
-                mInitY = mTempY = (int) event.getRawY() - mStatusBarHeight;
+                mInitY = mTempY = (int) event.getRawY();
+                //如果是从状态栏开始,则不拦截
+                if (mInitY < mStatusBarHeight) {
+                    return false;
+                }
                 //如果从边缘滑动,那么拦截这个Touch事件
                 if (mInitY <= mEdgeSlop) {
                     return true;
@@ -116,9 +120,14 @@ public class SlideFinishLayout extends FrameLayout {
                 break;
             case MotionEvent.ACTION_MOVE:
                 int moveY = (int) event.getY();
+                //先避免点击事件的拦截
+                if ((Math.abs((int) event.getRawX() - mInitX) < mTouchSlop)
+                        && (Math.abs((int)event.getRawY() - mInitY) < mTouchSlop)) {
+                    return false;
+                }
                 //向下滑动
-                if (!isSliding && moveY - mInitY > mTouchSlop) {
-                    if (Math.abs((int)event.getRawY() - mInitY) < mTouchSlop && Math.abs((int) event.getRawX() - mInitX) < mTouchSlop) {
+                if (!isSliding && moveY > mInitY) {
+                    if (Math.abs((int)event.getRawY() - mInitY) > mTouchSlop) {
                         isSliding = true;
                         return true;
                     }

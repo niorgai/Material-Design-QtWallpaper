@@ -47,4 +47,7 @@
 
     <!-- 收藏-->
     <string name="operate_fail">操作失败</string>
+
+    <!-- Support-->
+    <string name="no_store">暂无应用商店可评分</string>
 </resources>

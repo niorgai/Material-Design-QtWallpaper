@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -210,8 +211,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.send_feed_back:
                 startActivity(new Intent(this, FeedBackActivity.class));
                 return true;
-            //TODO::
             case R.id.support:
+                Uri uri = Uri.parse("market://details?id=" + getPackageName());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                PackageManager manager = getPackageManager();
+                if (intent.resolveActivity(manager) != null) {
+                    startActivity(intent);
+                } else {
+                    ToastUtil.getInstance().showToast(R.string.no_store);
+                }
                 return true;
             case R.id.about:
                 startActivity(new Intent(this, About.class));

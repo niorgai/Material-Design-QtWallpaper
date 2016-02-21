@@ -83,7 +83,6 @@ public class HotFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
             @Override
             public void run() {
                 AVQuery<CategoryItem> bannerQuery = AVQuery.getQuery(CategoryItem.class);
-                //TODO::缓存
                 bannerQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_ELSE_NETWORK);
                 bannerQuery.whereEqualTo(CategoryItem.IS_HOT, true);
                 try {
@@ -93,7 +92,6 @@ public class HotFragment extends BaseFragment implements SwipeRefreshLayout.OnRe
                     return;
                 }
                 AVQuery<WallpaperItem> gridQuery = AVQuery.getQuery(WallpaperItem.class);
-                //TODO::缓存
                 gridQuery.setCachePolicy(AVQuery.CachePolicy.CACHE_ELSE_NETWORK);
                 gridQuery.orderByDescending(WallpaperItem.DOWNLOADS);
                 gridQuery.limit(36);

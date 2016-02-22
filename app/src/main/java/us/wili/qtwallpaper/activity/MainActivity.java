@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 return true;
             case R.id.about:
-                startActivity(new Intent(this, About.class));
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
             case R.id.log_in:
                 mLoadingDialog.show();

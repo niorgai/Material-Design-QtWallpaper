@@ -44,7 +44,7 @@
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
-        <activity android:name=".activity.About"
+        <activity android:name=".activity.AboutActivity"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 

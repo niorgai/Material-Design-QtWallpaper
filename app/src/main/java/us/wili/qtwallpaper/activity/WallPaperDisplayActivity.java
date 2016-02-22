@@ -104,6 +104,15 @@ public class WallPaperDisplayActivity extends AppCompatActivity implements ViewP
     }
 
     @Override
+    public void onBackPressed() {
+        if (mOperationView.isShowing()) {
+            mOperationView.dismiss();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(0, 0);

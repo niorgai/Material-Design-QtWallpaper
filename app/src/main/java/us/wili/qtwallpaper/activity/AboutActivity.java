@@ -11,7 +11,7 @@ import us.wili.qtwallpaper.R;
  * 关于界面
  * Created by qiu on 2/2/16.
  */
-public class About extends BaseActivity {
+public class AboutActivity extends BaseActivity {
 
     @Override
     protected void initViews() {

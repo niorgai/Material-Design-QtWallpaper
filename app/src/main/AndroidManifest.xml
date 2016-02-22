@@ -48,6 +48,10 @@
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
+        <activity android:name=".activity.MyFavouritesActivity"
+            android:exported="false"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
         <!-- 友盟部分-->
         <meta-data
             android:name="UMENG_APPKEY"

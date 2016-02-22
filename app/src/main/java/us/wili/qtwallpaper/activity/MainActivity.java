@@ -204,6 +204,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.category:
                 changeTab(PAGE_CATEGORY);
                 return true;
+            case R.id.my_star:
+                if (AVUser.getCurrentUser() == null) {
+                    WxUtils.loginIn(this);
+                    return true;
+                }
+                startActivity(new Intent(this, MyFavouritesActivity.class));
+                return true;
             case R.id.clear_cache:
                 Fresco.getImagePipeline().clearCaches();
                 ToastUtil.getInstance().showToast(R.string.clear_cache_success);

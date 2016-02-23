@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -42,9 +43,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int PAGE_CATEGORY = 1;
 
     private SparseArray<Fragment> mFragments;
+    private FragmentManager mFragmentManager;
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private Toolbar mToolbar;
     private SimpleDraweeView mAvatar;
     private TextView mUserName;
 
@@ -52,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int currentTab = -1;
 
     private LoadingDialog mLoadingDialog;
+
+    private boolean isExit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,20 +67,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MobileConfig.screenWidth = metrics.widthPixels;
         MobileConfig.screenHeight = metrics.heightPixels;
 
-        initViews();
+        initViews(savedInstanceState);
 
         initData();
     }
 
-    private void initViews() {
+    private void initViews(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.hot);
+            actionBar.setTitle("");
         }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -90,20 +95,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         mContainer = R.id.container;
 
+        mFragmentManager = getSupportFragmentManager();
+
         mFragments = new SparseArray<>();
-        mFragments.put(PAGE_HOT, new HotFragment());
-        mFragments.put(PAGE_CATEGORY, new CategoryFragment());
+        int saveTab = PAGE_HOT; //选中tab
+        if (savedInstanceState == null) {
+            mFragments.put(PAGE_HOT, new HotFragment());
+            mFragments.put(PAGE_CATEGORY, new CategoryFragment());
+        } else {
+            saveTab = savedInstanceState.getInt("current", PAGE_HOT);
+            //从保存的状态中恢复,避免重复创建
+            if (mFragmentManager.getFragment(savedInstanceState, "HOT") != null) {
+                mFragments.put(PAGE_HOT, mFragmentManager.getFragment(savedInstanceState, "HOT"));
+            } else {
+                mFragments.put(PAGE_HOT, new HotFragment());
+            }
+            if (mFragmentManager.getFragment(savedInstanceState, "CATEGORY") != null) {
+                mFragments.put(PAGE_CATEGORY, mFragmentManager.getFragment(savedInstanceState, "CATEGORY"));
+            } else {
+                mFragments.put(PAGE_CATEGORY, new CategoryFragment());
+            }
+        }
+        showFragmentOnCreate(saveTab);
 
         mLoadingDialog = new LoadingDialog(this);
     }
 
     private void initData() {
-        //选中hot
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(mContainer, mFragments.get(PAGE_HOT));
-        ft.commit();
-        currentTab = PAGE_HOT;
-
         AVUser user = AVUser.getCurrentUser();
         if (user == null) {
             logOutSuccess();
@@ -134,6 +152,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }, new IntentFilter(BroadcastValue.LOGIN_COMPLETE));
     }
 
+    /**
+     * onCreate时根据上次保存的tab来显示Fragment
+     */
+    private void showFragmentOnCreate(int page) {
+        if (page == PAGE_HOT) {
+            FragmentTransaction ft = mFragmentManager.beginTransaction();
+            ft.hide(mFragments.get(PAGE_CATEGORY));
+            //选中hot
+            if (!mFragments.get(PAGE_HOT).isAdded()) {
+                ft.add(mContainer, mFragments.get(PAGE_HOT));
+            }
+            ft.commit();
+            mToolbar.setTitle(R.string.hot);
+            currentTab = PAGE_HOT;
+        } else {
+            FragmentTransaction ft = mFragmentManager.beginTransaction();
+            ft.hide(mFragments.get(PAGE_HOT));
+            //选中category
+            if (!mFragments.get(PAGE_CATEGORY).isAdded()) {
+                ft.add(mContainer, mFragments.get(PAGE_CATEGORY));
+            }
+            ft.commit();
+            mToolbar.setTitle(R.string.category);
+            currentTab = PAGE_CATEGORY;
+        }
+    }
+
     private void logInSuccess() {
         if (mNavigationView.getMenu() != null) {
             mNavigationView.getMenu().clear();
@@ -152,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mNavigationView.getMenu() != null) {
             mNavigationView.getMenu().clear();
         }
-        mNavigationView.inflateMenu(R.menu.nav_menu_login);
+        mNavigationView.inflateMenu(R.menu.navi_menu_login);
         mAvatar.setImageURI(Uri.EMPTY);
         mUserName.setText("");
     }
@@ -179,6 +224,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ft.commitAllowingStateLoss();
         }
         currentTab = tab;
+        switch (currentTab) {
+            case PAGE_HOT:
+                mToolbar.setTitle(R.string.hot);
+                break;
+            case PAGE_CATEGORY:
+                mToolbar.setTitle(R.string.category);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -243,5 +298,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //保存Fragment
+        Fragment hot = mFragments.get(PAGE_HOT);
+        if (hot != null && hot.isAdded()) {
+            mFragmentManager.putFragment(outState, "HOT", hot);
+        }
+        Fragment category = mFragments.get(PAGE_CATEGORY);
+        if (category != null && category.isAdded()) {
+            mFragmentManager.putFragment(outState, "CATEGORY", category);
+        }
+        outState.putInt("current", currentTab);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!isExit) {
+            isExit = true;
+            ToastUtil.getInstance().showToast(R.string.press_to_exit);
+            mDrawerLayout.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    isExit = false;
+                }
+            }, 2000);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -4,6 +4,7 @@
     <group android:id="@+id/group_tab" android:checkableBehavior="single">
         <item
             android:id="@+id/hot"
+            android:checked="true"
             android:icon="@drawable/selector_menu_hot"
             android:title="@string/hot"/>
 

@@ -4,6 +4,7 @@
     <!-- MainActivity-->
     <string name="hot">热门</string>
     <string name="category">分类</string>
+    <string name="press_to_exit">再按一次退出应用</string>
 
     <!-- Navigation-->
     <string name="login">微信登录</string>

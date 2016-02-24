@@ -77,17 +77,17 @@ public class UnlimitedBannerAdapter extends PagerAdapter implements View.OnClick
             }
         }
         container.addView(view);
-        SimpleDraweeView draweeViw = (SimpleDraweeView) view;
+        SimpleDraweeView draweeView = (SimpleDraweeView) view;
         ViewPagerModel model = data.get(position % data.size());
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(model.imageUrl))
                 .setResizeOptions(bannerResizeOption)
                 .build();
         DraweeController controller = Fresco.newDraweeControllerBuilder()
                 .setImageRequest(request)
-                .setOldController(draweeViw.getController())
+                .setOldController(draweeView.getController())
                 .build();
-        draweeViw.setController(controller);
-        draweeViw.setTag(model);
+        draweeView.setController(controller);
+        draweeView.setTag(model);
         return view;
     }
 

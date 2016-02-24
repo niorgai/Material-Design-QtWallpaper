@@ -2,13 +2,15 @@ package us.wili.qtwallpaper.utils;
 
 import android.util.Log;
 
+import us.wili.qtwallpaper.BuildConfig;
+
 /**
  * Log工具类
  * Created by qiu on 3/19/15.
  */
 public class LogUtils{
     public static final String TAG = "Debug";
-    private static final boolean DEBUG_FLAG = true;
+    private static final boolean DEBUG_FLAG = BuildConfig.DEBUG;
 
     public static void println( String printInfo ){
         if( DEBUG_FLAG && null != printInfo ){

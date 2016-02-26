@@ -2,6 +2,7 @@ package us.wili.qtwallpaper.widget;
 
 import android.Manifest;
 import android.animation.Animator;
+import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,9 +18,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.animation.BaseInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 
 import com.alibaba.fastjson.JSONArray;
@@ -46,12 +44,12 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
     private final int CODE_REQUEST_WRITE_STORAGE = 8;
 
     private final int ANIMATION_DURATION = 600;
-    private final int ANIMATION_DELAY = 50;
+    private final int ANIMATION_DELAY = 100;
     private final int Y_SHOW = 400;
     private final int Y_HIDE = 0;
 
-    private BaseInterpolator mShowInterpolator;
-    private BaseInterpolator mDismissInterpolator;
+    private TimeInterpolator mShowInterpolator;
+    private TimeInterpolator mDismissInterpolator;
 
     private ArrayList<ActiveImageView> imageViews;
 
@@ -73,6 +71,17 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
     public PictureOperationView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+        post(new Runnable() {
+            @Override
+            public void run() {
+                show();
+            }
+        });
     }
 
     private void init() {
@@ -100,8 +109,27 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
             }
         }, filter);
 
-        mShowInterpolator = new OvershootInterpolator(1.5f);
-        mDismissInterpolator = new DecelerateInterpolator(2f);
+        mShowInterpolator = new TimeInterpolator() {
+            @Override
+            public float getInterpolation(float x) {
+                if (x < 0.6) {
+                    return x * 2;
+                } else if (x < 0.9) {
+                    return -x + 1.8f;
+                }
+                return x;
+            }
+        };
+        mDismissInterpolator = new TimeInterpolator() {
+            @Override
+            public float getInterpolation(float x) {
+                if (x < 0.1) {
+                    return x;
+                } else if (x < 0.4) {
+                    return -x + 0.2f;
+                } return 2 * x - 1f;
+            }
+        };
     }
 
     public void show() {
@@ -111,6 +139,7 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
         setVisibility(VISIBLE);
         for (int i = 0; i < imageViews.size(); i++) {
             imageViews.get(i).setTranslationY(Y_SHOW);
+            imageViews.get(i).setAlpha(0f);
             if (i == 0) {
                 imageViews.get(i).animate().setListener(new Animator.AnimatorListener() {
                     @Override
@@ -132,7 +161,7 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                     public void onAnimationRepeat(Animator animation) {
 
                     }
-                }).translationY(Y_HIDE).setDuration(ANIMATION_DURATION).setInterpolator(mShowInterpolator).start();
+                }).alpha(1f).translationY(Y_HIDE).setDuration(ANIMATION_DURATION).setInterpolator(mShowInterpolator).start();
             } else if (i == 3) {
                 imageViews.get(i).animate().setListener(new Animator.AnimatorListener() {
                     @Override
@@ -155,9 +184,9 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                     public void onAnimationRepeat(Animator animation) {
 
                     }
-                }).setStartDelay(i * ANIMATION_DELAY).translationY(Y_HIDE).setDuration(ANIMATION_DURATION).setInterpolator(mShowInterpolator).start();
+                }).alpha(1f).setStartDelay(i * ANIMATION_DELAY).translationY(Y_HIDE).setDuration(ANIMATION_DURATION).setInterpolator(mShowInterpolator).start();
             } else {
-                imageViews.get(i).animate().setStartDelay(i * ANIMATION_DELAY).translationY(Y_HIDE).setDuration(ANIMATION_DURATION).setInterpolator(mShowInterpolator).start();
+                imageViews.get(i).animate().alpha(1f).setStartDelay(i * ANIMATION_DELAY).translationY(Y_HIDE).setDuration(ANIMATION_DURATION).setInterpolator(mShowInterpolator).start();
             }
         }
     }
@@ -170,8 +199,10 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
         if (!isShowing || isInAnimation) {
             return;
         }
+        isShowing = false;
         for (int i = 0; i < imageViews.size(); i++) {
             imageViews.get(i).setTranslationY(Y_HIDE);
+            imageViews.get(i).setAlpha(1f);
             if (i == 0) {
                 imageViews.get(i).animate().setListener(new Animator.AnimatorListener() {
                     @Override
@@ -193,7 +224,7 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                     public void onAnimationRepeat(Animator animation) {
 
                     }
-                }).translationY(Y_SHOW).setDuration(ANIMATION_DURATION).setInterpolator(mDismissInterpolator).start();
+                }).alpha(0f).translationY(Y_SHOW).setDuration(ANIMATION_DURATION).setInterpolator(mDismissInterpolator).start();
             } else if (i == 3) {
                 imageViews.get(i).animate().setListener(new Animator.AnimatorListener() {
                     @Override
@@ -217,9 +248,9 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                     public void onAnimationRepeat(Animator animation) {
 
                     }
-                }).setStartDelay(i * ANIMATION_DELAY).translationY(Y_SHOW).setDuration(ANIMATION_DURATION).setInterpolator(mDismissInterpolator).start();
+                }).alpha(0f).setStartDelay(i * ANIMATION_DELAY).translationY(Y_SHOW).setDuration(ANIMATION_DURATION).setInterpolator(mDismissInterpolator).start();
             } else {
-                imageViews.get(i).animate().setStartDelay(i * ANIMATION_DELAY).translationY(Y_SHOW).setDuration(ANIMATION_DURATION).setInterpolator(mDismissInterpolator).start();
+                imageViews.get(i).animate().alpha(0f).setStartDelay(i * ANIMATION_DELAY).translationY(Y_SHOW).setDuration(ANIMATION_DURATION).setInterpolator(mDismissInterpolator).start();
             }
         }
     }

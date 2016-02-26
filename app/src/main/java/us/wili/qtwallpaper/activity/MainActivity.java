@@ -26,7 +26,6 @@ import android.widget.TextView;
 import com.avos.avoscloud.AVUser;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.umeng.socialize.UMShareAPI;
 
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.connect.BroadcastValue;
@@ -332,9 +331,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
 }

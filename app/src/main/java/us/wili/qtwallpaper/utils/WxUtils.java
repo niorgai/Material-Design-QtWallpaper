@@ -156,47 +156,10 @@ public class WxUtils {
 
     //分享给微信好友
     public static void shareToWxSession(final Activity activity, final WallpaperItem item) {
-//        ImagePipeline pipeline = Fresco.getImagePipeline();
-//        BaseBitmapDataSubscriber subscriber = new BaseBitmapDataSubscriber() {
-//            @Override
-//            protected void onNewResultImpl(Bitmap bitmap) {
-//                final File imageFile = PictureUtils.saveWallPaperWithBitmap(activity, bitmap);
-//                LogUtils.printLogE("get bitmap: " + imageFile);
-//                if (imageFile != null) {
-//                    new ShareAction(activity)
-//                            .setPlatform(SHARE_MEDIA.WEIXIN)
-//                            .withMedia(new UMImage(activity, imageFile))
-//                            .withTargetUrl(item.imageUrl)
-//                            .setCallback(new UMShareListener() {
-//                                @Override
-//                                public void onResult(SHARE_MEDIA share_media) {
-//                                    imageFile.delete();
-//                                }
-//
-//                                @Override
-//                                public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-//                                    imageFile.delete();
-//                                }
-//
-//                                @Override
-//                                public void onCancel(SHARE_MEDIA share_media) {
-//                                    imageFile.delete();
-//                                }
-//                            })
-//                            .share();
-//                }
-//            }
-//
-//            @Override
-//            protected void onFailureImpl(DataSource<CloseableReference<CloseableImage>> dataSource) {
-//                ToastUtil.getInstance().showToast(R.string.set_wallpaper_fail);
-//            }
-//        };
-//        pipeline.fetchDecodedImage(ImageRequestBuilder.newBuilderWithSource(Uri.parse(item.imageUrl)).build(), activity)
-//                .subscribe(subscriber, UiThreadImmediateExecutorService.getInstance());
         new ShareAction(activity)
                 .setPlatform(SHARE_MEDIA.WEIXIN)
                 .withMedia(new UMImage(activity, item.imageUrl))
+                .withTargetUrl(item.imageUrl)
                 .withText(activity.getString(R.string.app_name))
                 .share();
     }
@@ -206,9 +169,9 @@ public class WxUtils {
         new ShareAction(activity)
                 .setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE)
                 .withMedia(new UMImage(activity, item.imageUrl))
-                        //TODO::为什么不设置text不能分享
+                .withTargetUrl(item.imageUrl)
                 .withTitle(activity.getString(R.string.app_name))
-                .withText("1")
+                .withText(activity.getString(R.string.app_name))
                 .share();
     }
 

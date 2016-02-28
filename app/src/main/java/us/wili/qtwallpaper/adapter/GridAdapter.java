@@ -66,6 +66,10 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridViewHolder
         notifyDataSetChanged();
     }
 
+    public ArrayList<WallpaperItem> getItemList() {
+        return itemList;
+    }
+
     @Override
     public int getItemViewType(int position) {
         return position % 2 == 0 ? TYPE_LEFT : TYPE_RIGHT;

@@ -11,4 +11,6 @@ public interface BroadcastValue {
     String LOGOUT = "logout";
 
     String LOGIN_COMPLETE = "login_complete";
+
+    String FAVOURITE_CHANGE = "favourite_change";
 }

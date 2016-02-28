@@ -1,6 +1,5 @@
 package us.wili.qtwallpaper.activity;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
@@ -25,7 +24,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.setContentView(R.layout.activity_base);
         StatusBarCompat.compat(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);

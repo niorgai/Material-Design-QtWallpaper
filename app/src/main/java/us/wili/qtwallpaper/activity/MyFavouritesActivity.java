@@ -1,5 +1,10 @@
 package us.wili.qtwallpaper.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +20,7 @@ import java.util.List;
 import us.wili.qtwallpaper.R;
 import us.wili.qtwallpaper.adapter.GridAdapter;
 import us.wili.qtwallpaper.connect.AVCallback;
+import us.wili.qtwallpaper.connect.BroadcastValue;
 import us.wili.qtwallpaper.model.User;
 import us.wili.qtwallpaper.model.WallpaperItem;
 import us.wili.qtwallpaper.utils.ToastUtil;
@@ -26,6 +32,8 @@ import us.wili.qtwallpaper.utils.UIUtils;
  */
 public class MyFavouritesActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
+    public static final String CHANGE_DATA = "change_data";
+
     private SwipeRefreshLayout mRefreshLayout;
 
     private GridAdapter mAdapter;
@@ -36,6 +44,7 @@ public class MyFavouritesActivity extends BaseActivity implements SwipeRefreshLa
         setContentView(R.layout.activity_category_detail);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
         UIUtils.changeRefreshLayoutColor(mRefreshLayout);
+        mRefreshLayout.setOnRefreshListener(this);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mAdapter = new GridAdapter(this);
@@ -46,6 +55,25 @@ public class MyFavouritesActivity extends BaseActivity implements SwipeRefreshLa
     protected void initData() {
         super.initData();
         setTitle(R.string.my_star);
+
+        //当收藏的壁纸发生变化时,通知Adapter
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
+        manager.registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final ArrayList<WallpaperItem> wallpaperIds = intent.getParcelableArrayListExtra(CHANGE_DATA);
+                if (wallpaperIds != null) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ArrayList<WallpaperItem> items = mAdapter.getItemList();
+                            items.removeAll(wallpaperIds);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        }, new IntentFilter(BroadcastValue.FAVOURITE_CHANGE));
     }
 
     @Override

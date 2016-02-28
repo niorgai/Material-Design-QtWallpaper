@@ -23,6 +23,7 @@
         <activity android:name=".activity.MainActivity"
             android:exported="true"
             android:theme="@style/EmptyBgTheme"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,24 +33,29 @@
 
         <activity android:name=".activity.CategoryDetailActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
         <activity android:name=".activity.WallPaperDisplayActivity"
             android:theme="@style/TranslucentTheme"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
         <activity android:name=".activity.FeedBackActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
         <activity android:name=".activity.AboutActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
         <activity android:name=".activity.MyFavouritesActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
         <!-- 友盟部分-->

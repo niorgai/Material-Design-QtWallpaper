@@ -28,6 +28,7 @@ import com.avos.avoscloud.SaveCallback;
 import java.util.ArrayList;
 
 import us.wili.qtwallpaper.R;
+import us.wili.qtwallpaper.activity.MyFavouritesActivity;
 import us.wili.qtwallpaper.connect.BroadcastValue;
 import us.wili.qtwallpaper.model.User;
 import us.wili.qtwallpaper.model.WallpaperItem;
@@ -57,6 +58,7 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
     private boolean isShowing = false;
 
     private WallpaperItem mWallpaperItem;
+    private ArrayList<WallpaperItem> mChangeItems; //记录更改了收藏的list
 
     private AVUser mCurrentUser;
 
@@ -130,6 +132,7 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                 } return 2 * x - 1f;
             }
         };
+        mChangeItems = new ArrayList<>();
     }
 
     public void show() {
@@ -349,10 +352,28 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                 if (e == null) {
                     imageViews.get(1).toggleActive();
                     imageViews.get(1).setClickable(true);
+                    if (mChangeItems.contains(mWallpaperItem)) {
+                        mChangeItems.remove(mWallpaperItem);
+                    } else {
+                        mChangeItems.add(mWallpaperItem);
+                    }
                 } else {
                     ToastUtil.getInstance().showToast(R.string.operate_fail);
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        //判断是否需要刷新我的收藏
+        if (!mChangeItems.isEmpty()) {
+            LocalBroadcastManager manager = LocalBroadcastManager.getInstance(getContext());
+            Intent intent = new Intent();
+            intent.putParcelableArrayListExtra(MyFavouritesActivity.CHANGE_DATA, mChangeItems);
+            intent.setAction(BroadcastValue.FAVOURITE_CHANGE);
+            manager.sendBroadcast(intent);
+        }
+        super.onDetachedFromWindow();
     }
 }

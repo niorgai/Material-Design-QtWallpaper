@@ -120,16 +120,20 @@ public class SlideFinishLayout extends FrameLayout {
                 break;
             case MotionEvent.ACTION_MOVE:
                 int moveY = (int) event.getY();
+                final float deltaX = Math.abs((int) event.getRawX() - mInitX);
+                final float deltaY = Math.abs((int) event.getRawY() - mInitY);
                 //先避免点击事件的拦截
-                if ((Math.abs((int) event.getRawX() - mInitX) < mTouchSlop)
-                        && (Math.abs((int)event.getRawY() - mInitY) < mTouchSlop)) {
+                if (deltaX < mTouchSlop && deltaY < mTouchSlop) {
                     return false;
                 }
                 //向下滑动
                 if (!isSliding && moveY > mInitY) {
                     if (Math.abs((int)event.getRawY() - mInitY) > mTouchSlop) {
-                        isSliding = true;
-                        return true;
+                        //当Y方向的位移远大于X方向的位移时,才判定为关闭
+                        if (deltaX * 0.7 < deltaY) {
+                            isSliding = true;
+                            return true;
+                        }
                     }
                 }
                 break;

@@ -9,6 +9,7 @@
         android:src="@drawable/selector_btn_save"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
+        android:background="?attr/buttonBarButtonStyle"
         android:layout_margin="16dp"
         android:layout_width="0dp"
         android:layout_weight="1"

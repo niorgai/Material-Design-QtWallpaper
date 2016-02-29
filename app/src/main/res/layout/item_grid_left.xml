@@ -7,6 +7,7 @@
     android:layout_marginRight="@dimen/item_grid_padding_small"
     android:layout_marginEnd="@dimen/item_grid_padding_small"
     android:layout_marginTop="@dimen/item_grid_padding_big"
+    android:foreground="?android:attr/selectableItemBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="@dimen/item_grid_shadow">
     <com.facebook.drawee.view.SimpleDraweeView

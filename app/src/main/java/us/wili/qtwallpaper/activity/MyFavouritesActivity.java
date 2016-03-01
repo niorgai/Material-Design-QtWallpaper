@@ -38,6 +38,9 @@ public class MyFavouritesActivity extends BaseActivity implements SwipeRefreshLa
 
     private GridAdapter mAdapter;
 
+    private LocalBroadcastManager mManager;
+    private BroadcastReceiver mFavouriteReceiver;
+
     @Override
     protected void initViews() {
         super.initViews();
@@ -57,8 +60,8 @@ public class MyFavouritesActivity extends BaseActivity implements SwipeRefreshLa
         setTitle(R.string.my_star);
 
         //当收藏的壁纸发生变化时,通知Adapter
-        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
-        manager.registerReceiver(new BroadcastReceiver() {
+        mManager = LocalBroadcastManager.getInstance(this);
+        mFavouriteReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 final ArrayList<WallpaperItem> wallpaperIds = intent.getParcelableArrayListExtra(CHANGE_DATA);
@@ -73,7 +76,8 @@ public class MyFavouritesActivity extends BaseActivity implements SwipeRefreshLa
                     });
                 }
             }
-        }, new IntentFilter(BroadcastValue.FAVOURITE_CHANGE));
+        };
+        mManager.registerReceiver(mFavouriteReceiver, new IntentFilter(BroadcastValue.FAVOURITE_CHANGE));
     }
 
     @Override
@@ -122,6 +126,11 @@ public class MyFavouritesActivity extends BaseActivity implements SwipeRefreshLa
                 mRefreshLayout.setRefreshing(false);
             }
         });
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mManager.unregisterReceiver(mFavouriteReceiver);
     }
 }

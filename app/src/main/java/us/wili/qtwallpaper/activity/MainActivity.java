@@ -62,6 +62,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private boolean isExit = false;
 
+    private LocalBroadcastManager mManager;
+    private BroadcastReceiver mLogInReceiver;
+    private BroadcastReceiver mLogOutReceiver;
+    private BroadcastReceiver mLoadingReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,27 +140,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             logInSuccess();
         }
 
-        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
-        manager.registerReceiver(new BroadcastReceiver() {
+        mManager = LocalBroadcastManager.getInstance(this);
+        mLogInReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 logInSuccess();
             }
-        }, new IntentFilter(BroadcastValue.LOGIN));
-        manager.registerReceiver(new BroadcastReceiver() {
+        };
+        mLogOutReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 logOutSuccess();
             }
-        }, new IntentFilter(BroadcastValue.LOGOUT));
-        manager.registerReceiver(new BroadcastReceiver() {
+        };
+        mLoadingReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (mLoadingDialog.isShowing()) {
                     mLoadingDialog.dismiss();
                 }
             }
-        }, new IntentFilter(BroadcastValue.LOGIN_COMPLETE));
+        };
+
+        mManager.registerReceiver(mLogInReceiver, new IntentFilter(BroadcastValue.LOGIN));
+        mManager.registerReceiver(mLogOutReceiver, new IntentFilter(BroadcastValue.LOGOUT));
+        mManager.registerReceiver(mLoadingReceiver, new IntentFilter(BroadcastValue.LOGIN_COMPLETE));
     }
 
     @Override
@@ -353,4 +362,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mManager.unregisterReceiver(mLogInReceiver);
+        mManager.unregisterReceiver(mLogOutReceiver);
+        mManager.unregisterReceiver(mLoadingReceiver);
+    }
 }

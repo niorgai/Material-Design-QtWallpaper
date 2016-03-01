@@ -62,6 +62,9 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
 
     private AVUser mCurrentUser;
 
+    private LocalBroadcastManager mManager;
+    private BroadcastReceiver mLogInReceiver;
+
     public PictureOperationView(Context context) {
         this(context, null);
     }
@@ -100,16 +103,17 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
             view.setOnClickListener(this);
         }
 
-        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(getContext());
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(BroadcastValue.LOGIN);
-        filter.addAction(BroadcastValue.LOGOUT);
-        manager.registerReceiver(new BroadcastReceiver() {
+        mManager = LocalBroadcastManager.getInstance(getContext());
+        mLogInReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 checkFavourites();
             }
-        }, filter);
+        };
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastValue.LOGIN);
+        filter.addAction(BroadcastValue.LOGOUT);
+        mManager.registerReceiver(mLogInReceiver, filter);
 
         mShowInterpolator = new TimeInterpolator() {
             @Override
@@ -368,12 +372,12 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
     protected void onDetachedFromWindow() {
         //判断是否需要刷新我的收藏
         if (!mChangeItems.isEmpty()) {
-            LocalBroadcastManager manager = LocalBroadcastManager.getInstance(getContext());
             Intent intent = new Intent();
             intent.putParcelableArrayListExtra(MyFavouritesActivity.CHANGE_DATA, mChangeItems);
             intent.setAction(BroadcastValue.FAVOURITE_CHANGE);
-            manager.sendBroadcast(intent);
+            mManager.sendBroadcast(intent);
         }
+        mManager.unregisterReceiver(mLogInReceiver);
         super.onDetachedFromWindow();
     }
 }

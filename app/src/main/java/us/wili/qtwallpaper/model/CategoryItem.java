@@ -17,6 +17,8 @@ public class CategoryItem extends AVObject {
 
     public static final String IS_HOT = "isHot";
 
+    public static final String ORDER = "order";
+
     public static final Creator CREATOR = AVObjectCreator.instance;
 
     public CategoryItem() {

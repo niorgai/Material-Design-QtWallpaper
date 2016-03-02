@@ -359,7 +359,7 @@ public class PictureOperationView extends LinearLayout implements View.OnClickLi
                     if (mChangeItems.contains(mWallpaperItem)) {
                         mChangeItems.remove(mWallpaperItem);
                     } else {
-                        mChangeItems.add(mWallpaperItem);
+                        mChangeItems.add(0, mWallpaperItem);
                     }
                 } else {
                     ToastUtil.getInstance().showToast(R.string.operate_fail);

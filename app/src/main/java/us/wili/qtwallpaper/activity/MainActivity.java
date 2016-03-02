@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.log_in:
                 mLoadingDialog.show();
-//                WxUtils.loginIn(this);
+                WxUtils.loginIn(this);
                 return true;
             case R.id.log_out:
                 WxUtils.logOut(this);

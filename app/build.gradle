@@ -19,8 +19,8 @@ android {
         applicationId "us.wili.qtwallpaper"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 120
-        versionName "1.2.0"
+        versionCode 130
+        versionName "1.3.0"
         //目前只考虑中文环境
         resConfigs "zh"
     }

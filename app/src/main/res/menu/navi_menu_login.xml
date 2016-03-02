@@ -4,7 +4,7 @@
     <group android:id="@+id/group_user" android:checkableBehavior="none">
         <item
             android:id="@+id/log_in"
-            android:icon="@drawable/btn_wechat_normal"
+            android:icon="@drawable/menu_wechat"
             android:title="@string/login"/>
     </group>
 
